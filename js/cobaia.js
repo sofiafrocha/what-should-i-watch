@@ -1,119 +1,7 @@
 var ids = new Array();
 var names = new Array();
-
-function getLikes() {
-	var axoreanah;
-
-	/*FB.api(
-	    "/me/friends",
-	    function (response) {
-	      if (response && !response.error) {
-	        console.log(response);
-	        axoreanah = response.data[0];
-	        console.log(axoreanah['id']);
-	      }
-
-	      var id = axoreanah['id'];
-
-			FB.api(
-			    "/" + id + "/movies",
-			    function (response) {
-			      if (response && !response.error) {
-			        console.log(response.data);
-			      }
-			    }
-			);
-	    }
-	),{scope: 'movies'};
-
-	FB.api(
-		"/me/likes",
-		function (response){
-			if (response && !response.error) {
-		        console.log(response);
-		      }
-			
-	});*/
-
-}
-
-function getMovies() {
-	//console.log("helloooooooooooo");
-	FB.api(
-    "/me/video.watches",
-    function (response) {
-	      if (response && !response.error) {
-
-	      	for (var i = 0; i < response.data.length; i++) {
-	      		response.data[i]
-	      		$('.lista-filmes').append('<li>' + response.data[i].data.movie.title + '</li>');
-	      	};
-
-	      	//var tudo = response.data[0];
-	        //console.log(tudo.data.movie.title);
-	      }
-	    }
-	);
-}
-
-function getFriends() {
-	FB.api(
-    "/me/friends",
-    function (response) {
-	      if (response && !response.error) {
-
-	      	for (var i = 0; i < response.data.length; i++) {
-	      		$('.lista-amigos').append('<li>' + response.data[i].name + '</li>');
-	      		//console.log("id: " + response.data[i].id);
-
-	      		ids.push(response.data[i].id);
-	      		names.push(response.data[i].name);
-
-	      		//console.log("ids[0]: " + ids[0]);
-	      		//console.log("names[0]: " + names[0]);
-	      	};
-	      }
-
-	      getIds();
-	      getFriendsLikes();
-	    }
-	);
-}
-
-function getIds() {
-	//console.log(ids.length);
-	//console.log(ids[1]);
-	for (var i = 0; i < ids.length; i++) {
-		//console.log("ESCREVE BOLAS + " + i);
-		//console.log("devia estar a escrever " + ids[i]);
-		$('.lista-ids').append('<li>' + ids[i] + '</li>');
-	};
-	
-}
-
-function getFriendsLikes() {
-	var likes = new Array();
-	console.log("getFriendsLikes, é adonde estamos");
-
-	for (var i = 0; i < names.length; i++) {
-		console.log("um?");
-		$('.main').append('<div class="large-3 columns ' + ids[i] + '"></div>');
-		$('.' + ids[i] + '').append('<h4>' + names[i] + '</h4>');
-		$('.' + ids[i] + '').append('<ul class="lista-likes"></ul>');
-
-		FB.api(
-	    "/" + ids[i] + "/likes",
-		    function (response) {
-		      if (response && !response.error) {
-		        for (var i = 0; i < response.data.length; i++){
-		        	$('.lista-likes').append('<li>' + response.data[i].name + '</li>');
-		        }
-		      }
-		    }
-		);
-	}
-}
-
+var userLikes = new Array();
+var friendLikes = new Array();
 
 
 // This is called with the results from from FB.getLoginStatus().
@@ -127,9 +15,7 @@ function getFriendsLikes() {
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
       testAPI();
-      getMovies();
-      getLikes();
-      getFriends();
+      getUsersMovies();
 
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -199,3 +85,119 @@ function getFriendsLikes() {
         'Thanks for logging in, ' + response.name + '!';
     });
   }
+
+  function getUsersMovies() {
+	//console.log("helloooooooooooo");
+	FB.api(
+    "/me/video.watches",
+    function (response) {
+	      if (response && !response.error) {
+
+	      	for (var i = 0; i < response.data.length; i++) {
+	      		response.data[i]
+	      		$('.lista-filmes').append('<li>' + response.data[i].data.movie.title + '</li>');
+	      	};
+
+	      	//var tudo = response.data[0];
+	        //console.log(tudo.data.movie.title);
+	      }
+	    }
+	);
+
+	getUsersFriends();
+}
+
+function getUsersFriends() {
+	FB.api(
+    "/me/friends",
+    function (response) {
+	      if (response && !response.error) {
+
+	      	for (var i = 0; i < response.data.length; i++) {
+	      		$('.lista-amigos').append('<li>' + response.data[i].name + '</li>');
+	      		//console.log("id: " + response.data[i].id);
+
+	      		ids.push(response.data[i].id);
+	      		names.push(response.data[i].name);
+
+	      		//console.log("ids[0]: " + ids[0]);
+	      		//console.log("names[0]: " + names[0]);
+	      	};
+	      }
+
+	      
+	      
+	    }
+	);
+
+	getFriendsLikes(ids[0]);
+	getUsersLikes();
+}
+
+function getFriendsIds() {
+	//console.log(ids.length);
+	//console.log(ids[1]);
+	for (var i = 0; i < ids.length; i++) {
+		//console.log("ESCREVE BOLAS + " + i);
+		//console.log("devia estar a escrever " + ids[i]);
+		$('.lista-ids').append('<li>' + ids[i] + '</li>');
+	};
+	
+}
+
+function getFriendsLikes(id) {
+	console.log("getFriendsLikes, é adonde estamos");
+
+	FB.api(
+    "/" + id + "/likes",
+	    function (response) {
+	      if (response && !response.error) {
+	        for (var i = 0; i < response.data.length; i++){
+	        	$('.lista-likes').append('<li>' + response.data[i].name + '</li>');
+	        	friendLikes.push(response.data[i].id);
+	        }
+	      }
+	    }
+	);
+}
+
+function printFriendsLikes() {
+	console.log("printFriendsLikes, é adonde estamos");
+
+	for (var i = 0; i < ids.length; i++) {
+		console.log("um?");
+		$('.main').append('<div class="large-3 columns ' + ids[i] + '"></div>');
+		$('.' + ids[i] + '').append('<h4>' + names[i] + '</h4>');
+		$('.' + ids[i] + '').append('<ul class="lista-likes"></ul>');
+	}
+}
+
+function getUsersLikes() {
+	$('.main').append('<div class="large-3 columns 123"></div>');
+	$('.123').append('<h4>Meus Likes</h4>');
+	$('.123').append('<ul class="lista-meus-likes"></ul>');
+
+	FB.api(
+    "/me/likes",
+	    function (response) {
+	      if (response && !response.error) {
+	        for (var i = 0; i < response.data.length; i++){
+	        	userLikes.push(response.data[i].id);
+	        	//console.log("userLikes[1]: " + userLikes[1]);
+	        	$('.lista-meus-likes').append('<li>' + response.data[i].name + '</li>');
+	        }
+	      }
+
+	      compareLikes();
+	    }
+	);
+}
+
+function compareLikes() {
+	console.log("compareLikes, é adonde estamos.");
+	console.log("like: " + userLikes[0]);
+	for (var i = 0; i < userLikes.length; i++) {
+		console.log("like: " + userLikes[i]);
+		
+	}
+}
