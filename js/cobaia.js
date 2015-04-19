@@ -19,6 +19,7 @@ var commonLikesNames = new Array();
       // Logged into your app and Facebook.
       testAPI();
       getUsersMovies();
+      
 
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -89,34 +90,41 @@ var commonLikesNames = new Array();
     });
   }
 
+
+/////////////////////////////////////////// NOSSAS CENAS ///////
+
+
   function getUsersMovies() {
-	//console.log("helloooooooooooo");
+	console.log("getUsersMovies() - 1");
 	FB.api(
-    "/me/video.watches",
-    function (response) {
+    "/me/video.watches", function (response) {
 	      if (response && !response.error) {
 
 	      	for (var i = 0; i < response.data.length; i++) {
 	      		response.data[i]
-	      		$('.lista-filmes').append('<li>' + response.data[i].data.movie.title + '</li>');
+	      		$('.list-movies').append('<li>' + response.data[i].data.movie.title + '</li>');
 	      	};
-
+	      	
 	      	//var tudo = response.data[0];
 	        //console.log(tudo.data.movie.title);
 	      }
+	      console.log("getUsersMovies() - 1 - API request complete");
 	      getUsersFriends();
 	    }
 	);
+
+	console.log("getUsersMovies() - 1 - END OF FUNCTION");
 }
 
 function getUsersFriends() {
+	console.log("getUsersFriends() - 2");
 	FB.api(
     "/me/friends",
     function (response) {
 	      if (response && !response.error) {
 
 	      	for (var i = 0; i < response.data.length; i++) {
-	      		$('.lista-amigos').append('<li>' + response.data[i].name + '</li>');
+	      		$('.list-friends').append('<li>' + response.data[i].name + '</li>');
 	      		//console.log("id: " + response.data[i].id);
 
 	      		ids.push(response.data[i].id);
@@ -125,12 +133,14 @@ function getUsersFriends() {
 	      		//console.log("ids[0]: " + ids[0]);
 	      		//console.log("names[0]: " + names[0]);
 	      	};
+	      	console.log("getUsersFriends() - 2- API request complete");
+	      	/// TODO: Isto estar num for, para ele fazer o mesmo para todos os amigos
+	      	getFriendsLikes(ids[0]);
 	      }
-
-	    	getFriendsLikes(ids[0]);
-	      
 	    }  
 	);
+
+	console.log("getUsersFriends() - 2 - END OF FUNCTION");
 }
 
 function getFriendsIds() {
@@ -145,7 +155,8 @@ function getFriendsIds() {
 }
 
 function getFriendsLikes(id) {
-	console.log("getFriendsLikes, é adonde estamos");
+	console.log("getFriendsLikes() - 3");
+
 
 	FB.api(
     "/" + id + "/likes",
@@ -158,13 +169,27 @@ function getFriendsLikes(id) {
 	        	//console.log("id do like é:" +response.data[i].id);
 	        }
 	      }
-	      getUsersLikes();
+	      console.log("getFriendsLikes() - 3 - API request complete");
+	      printFriendsLikes();
 	    }
 	);
+
+	console.log("getFriendsLikes() - 3 - END OF FUNCTION");
+}
+
+function printFriendsLikes() {
+	console.log("printFriendsLikes() - 4");
+
+	for (var i = 0; i < friendLikesNames.length; i++) {
+		$('.list-friends-likes').append('<li>' + friendLikesNames[i] + '</li>');
+	}
+
+	getUsersLikes();
+	console.log("printFriendsLikes() - END OF FUNCTION");
 }
 
 function printFriendsNames() {
-	console.log("printFriendsLikes, é adonde estamos");
+	console.log("printFriendsNames, é adonde estamos");
 
 	for (var i = 0; i < ids.length; i++) {
 		console.log("um?");
@@ -178,9 +203,7 @@ function printFriendsNames() {
 }
 
 function getUsersLikes() {
-	$('.main').append('<div class="large-3 columns 123"></div>');
-	$('.123').append('<h4>Meus Likes</h4>');
-	$('.123').append('<ul class="lista-meus-likes"></ul>');
+	console.log("getUsersLikes() - 5");
 
 	FB.api(
     "/me/likes",
@@ -189,17 +212,21 @@ function getUsersLikes() {
 	        for (var i = 0; i < response.data.length; i++){
 	        	userLikes.push(response.data[i].id);
 	        	//console.log("userLikes[1]: " + userLikes[1]);
-	        	$('.lista-meus-likes').append('<li>' + response.data[i].name + '</li>');
+	        	$('.list-my-likes').append('<li>' + response.data[i].name + '</li>');
+	        	//console.log(response);
 	        }
 	      }
-
+	      console.log("getUsersLikes() - 5 - API request complete");
 	      compareLikes();
 	    }
 	);
+
+	console.log("getUsersLikes() - 5 - END OF FUNCTION");
+    
 }
 
 function compareLikes() {
-	console.log("compareLikes, é adonde estamos.");
+	console.log("compareLikes() - 6");
 
 	for (var i = 0; i < userLikes.length; i++) {
 		//console.log("like: " + userLikes[i]);
@@ -218,19 +245,17 @@ function compareLikes() {
 		}
 		//console.log("final");
 	}
-
 	printCommon();
+	console.log("compareLikes() - 6 - END OF FUNCTION");
 }
 
 function printCommon() {
 
-	console.log("kansdknjf");
-
-	$('.main').append('<div class="large-3 columns 456"></div>');
-	$('.456').append('<h4>Likes em Comum</h4>');
-	$('.456').append('<ul class="lista-likes-comuns"></ul>');
+	console.log("printCommon() - 7");
 
 	for (var i = 0; i < commonLikesIDs.length; i++) {
-		$('.lista-likes-comuns').append('<li>' + commonLikesNames[i] + '</li>');
+		$('.list-common-likes').append('<li>' + commonLikesNames[i] + '</li>');
 	}
+
+	console.log("printCommon() - 7 - END OF FUNCTION");
 }
