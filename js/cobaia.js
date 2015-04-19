@@ -1,7 +1,10 @@
 var ids = new Array();
 var names = new Array();
 var userLikes = new Array();
-var friendLikes = new Array();
+var friendLikesIDs = new Array();
+var friendLikesNames = new Array();
+var commonLikesIDs = new Array();
+var commonLikesNames = new Array();
 
 
 // This is called with the results from from FB.getLoginStatus().
@@ -101,10 +104,9 @@ var friendLikes = new Array();
 	      	//var tudo = response.data[0];
 	        //console.log(tudo.data.movie.title);
 	      }
+	      getUsersFriends();
 	    }
 	);
-
-	getUsersFriends();
 }
 
 function getUsersFriends() {
@@ -125,13 +127,10 @@ function getUsersFriends() {
 	      	};
 	      }
 
+	    	getFriendsLikes(ids[0]);
 	      
-	      
-	    }
+	    }  
 	);
-
-	getFriendsLikes(ids[0]);
-	getUsersLikes();
 }
 
 function getFriendsIds() {
@@ -153,22 +152,28 @@ function getFriendsLikes(id) {
 	    function (response) {
 	      if (response && !response.error) {
 	        for (var i = 0; i < response.data.length; i++){
-	        	$('.lista-likes').append('<li>' + response.data[i].name + '</li>');
-	        	friendLikes.push(response.data[i].id);
+	        	//$('.lista-likes').append('<li>' + response.data[i].name + '-' + response.data[i].id + '</li>');
+	        	friendLikesIDs.push(response.data[i].id);
+	        	friendLikesNames.push(response.data[i].name);
+	        	//console.log("id do like é:" +response.data[i].id);
 	        }
 	      }
+	      getUsersLikes();
 	    }
 	);
 }
 
-function printFriendsLikes() {
+function printFriendsNames() {
 	console.log("printFriendsLikes, é adonde estamos");
 
 	for (var i = 0; i < ids.length; i++) {
 		console.log("um?");
 		$('.main').append('<div class="large-3 columns ' + ids[i] + '"></div>');
 		$('.' + ids[i] + '').append('<h4>' + names[i] + '</h4>');
-		$('.' + ids[i] + '').append('<ul class="lista-likes"></ul>');
+
+		for (var j = 0; j < friendLikesIDs.length; j++) {
+			$('.' + ids[i] + '').append('<ul class="lista-likes"></ul>');
+		}
 	}
 }
 
@@ -195,9 +200,37 @@ function getUsersLikes() {
 
 function compareLikes() {
 	console.log("compareLikes, é adonde estamos.");
-	console.log("like: " + userLikes[0]);
+
 	for (var i = 0; i < userLikes.length; i++) {
-		console.log("like: " + userLikes[i]);
-		
+		//console.log("like: " + userLikes[i]);
+		//console.log("dentro de um for");
+
+		//console.log(friendLikesIDs.length);
+		for (var k = 0; k < friendLikesIDs.length; k++) {
+
+			//console.log("dentro do outro for");
+
+			if (userLikes[i] === friendLikesIDs[k]) {
+				console.log("Igual detectado! É o " + userLikes[i]);
+				commonLikesIDs.push(friendLikesIDs[k]);
+				commonLikesNames.push(friendLikesNames[k]);
+			}
+		}
+		//console.log("final");
+	}
+
+	printCommon();
+}
+
+function printCommon() {
+
+	console.log("kansdknjf");
+
+	$('.main').append('<div class="large-3 columns 456"></div>');
+	$('.456').append('<h4>Likes em Comum</h4>');
+	$('.456').append('<ul class="lista-likes-comuns"></ul>');
+
+	for (var i = 0; i < commonLikesIDs.length; i++) {
+		$('.lista-likes-comuns').append('<li>' + commonLikesNames[i] + '</li>');
 	}
 }
