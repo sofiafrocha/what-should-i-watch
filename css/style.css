@@ -12,3 +12,13 @@
     fill: Yellow;
     background: Yellow;   
 }
+
+body {
+    background-color: DarkSlateBlue;
+    color: white;
+}
+
+text {
+    font-family: Comic Sans MS; 
+    font-size: 25px;
+}
