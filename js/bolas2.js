@@ -1,10 +1,17 @@
-var data = {"friends_list": {
-    "Sofia": 18, 
-    "Joaquina": 15, 
-    "Emanuelina": 55
-}};
+var friends_list = [
+    {
+        "name" : "Sofia",
+        "magicNumber" : 18
+    }, {
+        "name" : "Joaquina",
+        "magicNumber" : 15
+    }, {
+        "name" : "Emanuelina",
+        "magicNumber" : 35
+    }
+];
 
-(function() { 
+
 	
   // D3 Bubble Chart 
 
@@ -14,22 +21,23 @@ var data = {"friends_list": {
 		.attr('width', diameter)
 		.attr('height', diameter);
 
-	var bubble = d3.layout.pack()
-		.size([diameter, diameter])
-		.value(function(d) {return d.size;}) // new data is loaded to bubble layout
-		.padding(3);
+    var bubble = d3.layout.pack()
+        .size([diameter, diameter])
+        .value(function(d) {return d.size;}) // new data is loaded to bubble layout
+        .padding(3)
+        .data(friends_list);
 
-		// generate data with calculated layout values
-		var nodes = bubble.nodes(processData(data))
-			.filter(function(d) { return !d.children; }); // filter out the outer bubble
+        // generate data with calculated layout values
+        var nodes = bubble.nodes(data)
+            .filter(function(d) { return !d.children; }); // filter out the outer bubble
 
-		// assign new data to existing DOM 
-		var vis = svg.selectAll('circle')
-			.data(nodes, function(d) { return d.name; });
+        // assign new data to existing DOM 
+        var vis = svg.selectAll('circle')
+            .data(nodes, function(d) { return d.name; });
 
-            
-        var elem = svg.selectAll("g bubbleText")
-            .data(processData(data));
+
+         var elem = svg.selectAll("g bubbleText")
+            .data(friends_list);
 
         var elemEnter = vis.enter()
             .append("g")
@@ -45,19 +53,3 @@ var data = {"friends_list": {
             .attr("dx", function(d){return -0.5*d.r})
             .text(function(d){return d.name});
 
-
-        function processData(data) {
-            if(!data) return;
-
-            var obj = data.friends_list;
-
-            var newDataSet = [];
-
-            for(var prop in obj) {
-                newDataSet.push({name: prop, className: prop.toLowerCase().replace(/ /g,''), size: obj[prop]});
-            }
-            return {children: newDataSet};
-        }
-
-
-})();
