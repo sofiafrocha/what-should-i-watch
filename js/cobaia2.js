@@ -257,12 +257,19 @@ function compareLikes() {
         }
 
     }
+
+    printUsersLikes(0);
 }
 
 //// Print the User's likes
 
-function printUsersLikes() {
-    
+function printUsersLikes(friendId) {
+    $('.' + friendId).append('<div class="large-4 user-likes"></div>');
+    $('.' + friendId + ' .user-likes').append('<ul></ul>');
+
+    for (var i = 0; i < user.likesName.length; i++) {
+        $('.' + friendId + ' .user-likes ul').append('<li>' + user.likesName[i] + '</li>');
+    }
 }
 
 //// Print the Friend's likes
