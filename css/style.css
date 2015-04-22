@@ -12,3 +12,8 @@
     fill: Yellow;
     background: Yellow;   
 }
+
+body {
+    background-color: DarkSlateBlue;
+    color: white;
+}
