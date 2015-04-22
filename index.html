@@ -1,61 +1,42 @@
 <!doctype html>
 <html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Foundation | Welcome</title>
-    <link rel="stylesheet" href="css/foundation.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <script src="js/vendor/modernizr.js"></script>
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/cobaia.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-      
-  </head>
-  <body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Foundation | Welcome</title>
+        <link rel="stylesheet" href="css/foundation.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="js/vendor/modernizr.js"></script>
+        <script src="js/vendor/jquery.js"></script>
+        <script src="js/cobaia2.js"></script>
+    </head>
+    <body>
 
 
-    <div class="row">
-      <div class="large-12 columns">
-        <h1>Welcome to Foundation</h1>
+        <div class="row">
+            <div class="large-12 columns">
+                <h1>Welcome to Foundation</h1>
 
-        <fb:login-button scope="public_profile,email,user_friends,user_actions.video,user_likes" onlogin="checkLoginState();">
-        </fb:login-button>
+                <fb:login-button scope="public_profile,email,user_friends,user_actions.video,user_likes" onlogin="checkLoginState();">
+                </fb:login-button>
 
-        <div id="status">
+                <div id="status">
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row main">
-      
-      <div class="large-3 columns">
-        <h4>Filmes</h4>
-        <ul class="lista-filmes">
-          
-        </ul>
-      </div>
+        <div class="row user">
 
-      <div class="large-3 columns">
-        <h4>Miguitos</h4>
-        <ul class="lista-amigos">
-          
-        </ul>
-      </div>
-      </div>
-      
-      <div class="row main">
-          <div id="graph">
+        </div>
 
-          </div>
-      </div>
+        <div class="row friend">
+            
+        </div>
 
-    <script src="js/foundation.min.js"></script>
-    <script src="js/bolas.js"></script>
-    <script>
-    $(document).foundation();
-    </script>
-      
-      
-  </body>
+
+        <script src="js/foundation.min.js"></script>
+        <script>
+        $(document).foundation();
+        </script>
+    </body>
 </html>
