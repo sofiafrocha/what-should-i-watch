@@ -1,3 +1,5 @@
+var friends = [];
+
 var user = {
     likesName: [],
     likesID: [],
@@ -119,12 +121,12 @@ function getUsersLikes() {
                 getUsersFriends();
                 
             }
-            console.log("1 - getUsersLikes - user.likesName: " + user.likesName);
-            console.log("1 - getUsersLikes - user.likesID: " + user.likesID);
+            //console.log("1 - getUsersLikes - user.likesName: " + user.likesName);
+            //console.log("1 - getUsersLikes - user.likesID: " + user.likesID);
+
+            console.log("1 - getUsersLikes - END");
         }
     );
-
-    console.log("1 - getUsersLikes - END");
 }
 
 // Get User's Friends
@@ -138,6 +140,9 @@ function getUsersFriends() {
                 for (var i = 0; i < response.data.length; i++) {
                     user.friendsNames.push(response.data[i].name);
                     user.friendsIDs.push(response.data[i].id);
+
+                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [] };
+                    friends.push(temp);
                 }
 
                 console.log("2 - getUsersFriends - API RESPONDED");
@@ -145,17 +150,17 @@ function getUsersFriends() {
                 console.log("2 - getUsersFriends - user.friendsIDs: " + user.friendsIDs);
 
                 printUsersFriends();
+
+                console.log("2 - getUsersFriends - END");
             }
         }
-    );
-
-    console.log("2 - getUsersFriends - END");
+    );  
 }
 
 // Print User's Friends
 
 function printUsersFriends() {
-    console.log("hello?");
+    //console.log("hello?");
 
     $('.user').append('<div class="large-3 columns"></div>');
     $('.user .columns').append('<h4>Your Friends</h4>');
@@ -165,11 +170,68 @@ function printUsersFriends() {
         $('.user-friends').append('<li>' + user.friendsNames[i] + '</li>');
         //console.log("user.friendsNames[i]: " + user.friendsNames[i]);
     }
+
+    getFriendsLikes();
 }
 
 // For every friend
-
 //// Get the friend's likes
+
+function getFriendsLikes() {
+
+    var tempIDs = [];
+    var tempNames = [];
+    var temp1;
+    var temp2;
+
+    console.log("ISTO " + friends);
+    console.log("ESTE " + friends[0]);
+    console.log("AQUI " + friends[0].name);
+
+    for (var i = 0; i < friends.length; i++) {
+        
+        FB.api("/" + friends[i].id + "/likes",
+            function(response) {
+                if (response && !response.error) {
+
+                    for (var j = 0; j < response.data.length; j++) {
+                        //console.log("are you running?");
+                        
+                        //console.log(response.data[j].id);
+
+                        temp1 = response.data[j].id;
+                        temp2 = response.data[j].name;
+
+                        console.log("temp1: " + temp1);
+                        console.log("temp2: " + temp2);
+
+                        tempIDs.push(temp1);
+                        tempNames.push(temp2);
+
+                        
+
+                        //tempIDs.push(response.data[j].id);
+                        //tempNames.push(response.data[j].name);
+                    }
+
+                    console.log("tempIDs[0]: " + tempIDs[0]);
+                    console.log("tempIDs[1]: " + tempIDs[1]);
+
+                    console.log("friends[i].id: " + friends[i].id);
+                    console.log("friends[i].likesNames: " + friends[i].likesNames);
+
+                    //console.log("ISTO ISTO " + friends);
+                    //console.log("i: " + i);
+
+                    //friends[i].likesNames = tempNames;
+                    //friends[i].likesIDs = tempIDs;
+
+                    //console.log("ISTO TAMBÉM " + friends[i]);
+                }
+            }
+        );
+    }
+}
 
 //// Compare the likes
 
