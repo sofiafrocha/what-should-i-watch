@@ -141,7 +141,7 @@ function getUsersFriends() {
                     user.friendsNames.push(response.data[i].name);
                     user.friendsIDs.push(response.data[i].id);
 
-                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [] };
+                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [] };
                     friends.push(temp);
                 }
 
@@ -189,6 +189,8 @@ function getFriendsLikes() {
     console.log("AQUI " + friends[0].name);
 
     for (var i = 0; i < friends.length; i++) {
+
+        console.log("SIM?: " + friends[i]);
         
         FB.api("/" + friends[i].id + "/likes",
             function(response) {
@@ -202,40 +204,66 @@ function getFriendsLikes() {
                         temp1 = response.data[j].id;
                         temp2 = response.data[j].name;
 
-                        console.log("temp1: " + temp1);
-                        console.log("temp2: " + temp2);
-
                         tempIDs.push(temp1);
                         tempNames.push(temp2);
 
-                        
-
-                        //tempIDs.push(response.data[j].id);
-                        //tempNames.push(response.data[j].name);
                     }
+                    //console.log("tempIDs[0]: " + tempIDs[0]);
+                    //console.log("tempIDs[1]: " + tempIDs[1]);
 
-                    console.log("tempIDs[0]: " + tempIDs[0]);
-                    console.log("tempIDs[1]: " + tempIDs[1]);
-
-                    console.log("friends[i].id: " + friends[i].id);
-                    console.log("friends[i].likesNames: " + friends[i].likesNames);
+                    //console.log("friends[i].id: " + friends[i].id);
+                    //console.log("friends[i].likesNames: " + friends[i].likesNames);
 
                     //console.log("ISTO ISTO " + friends);
                     //console.log("i: " + i);
 
-                    //friends[i].likesNames = tempNames;
-                    //friends[i].likesIDs = tempIDs;
-
                     //console.log("ISTO TAMBÉM " + friends[i]);
                 }
+
+                compareLikes();
             }
         );
-    }
+
+        friends[i].likesNames = tempNames;
+        friends[i].likesIDs = tempIDs;
+    }   
 }
 
 //// Compare the likes
+function compareLikes() {
+
+    console.log("comparar!!");
+
+    for (var i = 0; i < friends.length; i++) {
+
+        for (var k = 0; k < user.likesID.length; k++) {
+
+            //console.log("compareLikes - friends[i].likesIDs: " + friends[i].likesIDs);
+
+            for (var j = 0; j < friends[i].likesIDs.length; j++) {
+
+                //console.log("compareLikes - está a tentar comparar");
+
+                if (user.likesID[k] === friends[i].likesIDs[j]) {
+
+                    console.log("encontrado um em comum!");
+                    friends[i].commonLikesIDs.push(user.likesID[k]);
+                    friends[i].commonLikesNames.push(user.likesName[k]);
+
+                    console.log("os em comum actuais são: " + friends[i].commonLikesNames);
+                }
+            }
+
+        }
+
+    }
+}
 
 //// Print the User's likes
+
+function printUsersLikes() {
+    
+}
 
 //// Print the Friend's likes
 
