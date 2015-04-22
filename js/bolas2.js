@@ -1,97 +1,84 @@
-
-//FAKE JSON
-var json = {"friends_list": {
+var data = {"friends_list": {
     "Sofia": 18, 
     "Joaquina": 15, 
     "Emanuelina": 55
 }};
+(function() { 
+	
+  // D3 Bubble Chart 
 
-var width = 960,
-    height = 500;
+	var diameter = 600;
 
-var color = d3.scale.category10();
+	var svg = d3.select('#chart').append('svg')
+		.attr('width', diameter)
+		.attr('height', diameter);
 
-var nodes = [],
-    links = [];
+	var bubble = d3.layout.pack()
+		.size([diameter, diameter])
+		.value(function(d) {return d.size;}) // new data is loaded to bubble layout
+		.padding(3);
 
-var force = d3.layout.force()
-    .nodes(nodes)
-    .links(links)
-    .charge(-400)
-    .linkDistance(120)
-    .size([width, height])
-    .on("tick", tick);
+	function drawBubbles() {
 
-var svg = d3.select("#mainBubble").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+		// generate data with calculated layout values
+		var nodes = bubble.nodes(processData(data))
+			.filter(function(d) { return !d.children; }); // filter out the outer bubble
 
-/*
-var node = svg.selectAll(".node"),
-    link = svg.selectAll(".link");
-*/
+		// assign new data to existing DOM 
+		var vis = svg.selectAll('circle')
+			.data(nodes, function(d) { return d.name; });
 
-// generate bubbles with values calculated from friends_list
-var bubbles = force.nodes(processData(json));
+		// enter data -> remove, so non-exist selections for upcoming data won't stay -> enter new data -> ...
 
-var node = svg.selectAll('circle').data(nodes);
-var link = svg.selectAll(".link");
+		// To chain transitions, 
+		// create the transition on the updating elements before the entering elements 
+		// because enter.append merges entering elements into the update selection
 
-// 1. Add three nodes and three links.
-setTimeout(function() {
-  var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
-  nodes.push(a, b, c);
-  links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
-  start();
-}, 0);
+		var duration = 300;
+		var delay = 0;
 
-// 2. Remove node B and associated links.
-setTimeout(function() {
-  nodes.splice(1, 1); // remove b
-  links.shift(); // remove a-b
-  links.pop(); // remove b-c
-  start();
-}, 3000);
+		// update - this is created before enter.append. it only applies to updating nodes.
+		vis.transition()
+			.duration(duration)
+			.delay(function(d, i) {delay = i * 7; return delay;}) 
+			.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
+			.attr('r', function(d) { return d.r; })
+			.style('opacity', 1); // force to 1, so they don't get stuck below 1 at enter()
 
-// Add node B back.
-setTimeout(function() {
-  var a = nodes[0], b = {id: "b"}, c = nodes[1];
-  nodes.push(b);
-  links.push({source: a, target: b}, {source: b, target: c});
-  start();
-}, 6000);
+		// enter - only applies to incoming elements (once emptying data)	
+		vis.enter().append('circle')
+			.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
+			.attr('r', function(d) { return d.r; })
+			.attr('class', function(d) { return d.className; })
+			.style('opacity', 0) 
+			.transition()
+			.duration(duration * 1.2)
+			.style('opacity', 1);
 
-function start() {
-  link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
-  link.enter().insert("line", ".node").attr("class", "link");
-  link.exit().remove();
-
-  node = node.data(force.nodes(), function(d) { return d.id;});
-  node.enter().append("circle").attr("class", function(d) { return "node " + d.id; }).attr("r", 8);
-  node.exit().remove();
-
-  force.start();
-}
-
-function tick() {
-  node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
-
-  link.attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
-}
-
+		// exit
+		vis.exit()
+			.transition()
+			.duration(duration + delay)
+			.style('opacity', 0)
+			.remove();
+	}
     
-function processData(data) {
-    var source = data.friends_list;
-    var newDataSet = [];
+//	drawBubbles(m);
 
-    for(var val in source) {
-        newDataSet.push({name: val, className: val.toLowerCase(), size: source[val]});
-    }
-        return {children: newDataSet};
-        console.log("OLHA PARA MIM"+newDataSet);
-    }
 
+	function processData(data) {
+		if(!data) return;
+
+		var obj = data.friends_list;
+
+		var newDataSet = [];
+
+		for(var prop in obj) {
+			newDataSet.push({name: prop, className: prop.toLowerCase().replace(/ /g,''), size: obj[prop]});
+		}
+		return {children: newDataSet};
+	}
+
+    drawBubbles();
+
+})();
