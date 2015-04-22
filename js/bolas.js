@@ -3,6 +3,20 @@ var data = {"friends_list": {
     "Joaquina": 15, 
     "Emanuelina": 55
 }};
+
+var friends_list = [
+    {
+        "name" : Sofia,
+        "magicNumber" : 18
+    }, {
+        "name" : Joaquina,
+        "magicNumber" : 15
+    }, {
+        "name" : Emanuelina,
+        "magicNumber" : 35
+    }
+];
+
 (function() { 
 	
   // D3 Bubble Chart 
@@ -18,8 +32,6 @@ var data = {"friends_list": {
 		.value(function(d) {return d.size;}) // new data is loaded to bubble layout
 		.padding(3);
 
-	function drawBubbles() {
-
 		// generate data with calculated layout values
 		var nodes = bubble.nodes(processData(data))
 			.filter(function(d) { return !d.children; }); // filter out the outer bubble
@@ -28,60 +40,37 @@ var data = {"friends_list": {
 		var vis = svg.selectAll('circle')
 			.data(nodes, function(d) { return d.name; });
 
-        
-        
-        
-        //TRANSIÇÕES ABAIXO, SÓ PARA DEPOIS
-		// enter data -> remove, so non-exist selections for upcoming data won't stay -> enter new data -> ...
+            
+        var elem = svg.selectAll("g bubbleText")
+            .data(processData(data));
 
-		// To chain transitions, 
-		// create the transition on the updating elements before the entering elements 
-		// because enter.append merges entering elements into the update selection
+        var elemEnter = vis.enter()
+            .append("g")
 
-		var duration = 300;
-		var delay = 0;
+        var circle = elemEnter.append("circle")
+            .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
+            .attr("r", function(d){return d.r} )
+            .attr("stroke","black")
+            .attr('class', function(d) { return d.className; });
 
-		// update - this is created before enter.append. it only applies to updating nodes.
-		vis.transition()
-			.duration(duration)
-			.delay(function(d, i) {delay = i * 7; return delay;}) 
-			.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
-			.attr('r', function(d) { return d.r; })
-			.style('opacity', 1); // force to 1, so they don't get stuck below 1 at enter()
-
-		// enter - only applies to incoming elements (once emptying data)	
-		vis.enter().append('circle')
-			.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
-			.attr('r', function(d) { return d.r; })
-			.attr('class', function(d) { return d.className; })
-			.style('opacity', 0) 
-			.transition()
-			.duration(duration * 1.2)
-			.style('opacity', 1);
-
-		// exit
-		vis.exit()
-			.transition()
-			.duration(duration + delay)
-			.style('opacity', 0)
-			.remove();
-	}
-    
+        elemEnter.append("text")
+            .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
+            .attr("dx", function(d){return -0.5*d.r})
+            .text(function(d){return d.name});
 
 
-	function processData(data) {
-		if(!data) return;
+        function processData(data) {
+            if(!data) return;
 
-		var obj = data.friends_list;
+            var obj = data.friends_list;
 
-		var newDataSet = [];
+            var newDataSet = [];
 
-		for(var prop in obj) {
-			newDataSet.push({name: prop, className: prop.toLowerCase().replace(/ /g,''), size: obj[prop]});
-		}
-		return {children: newDataSet};
-	}
-    
-            drawBubbles();
+            for(var prop in obj) {
+                newDataSet.push({name: prop, className: prop.toLowerCase().replace(/ /g,''), size: obj[prop]});
+            }
+            return {children: newDataSet};
+        }
+
 
 })();
