@@ -141,7 +141,7 @@ function getUsersFriends() {
                     user.friendsNames.push(response.data[i].name);
                     user.friendsIDs.push(response.data[i].id);
 
-                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [] };
+                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [] };
                     friends.push(temp);
                 }
 
@@ -188,7 +188,7 @@ function getFriendsLikes() {
     console.log("ESTE " + friends[0]);
     console.log("AQUI " + friends[0].name);
 
-    for (var i = 0; i < user.friendsNames.length; i++) {
+    for (var i = 0; i < friends.length; i++) {
 
         console.log("SIM?: " + friends[i]);
         
@@ -270,8 +270,6 @@ function printUsersLikes(friendId) {
     for (var i = 0; i < user.likesName.length; i++) {
         $('.' + friendId + ' .user-likes ul').append('<li>' + user.likesName[i] + '</li>');
     }
-    
-    compatibility();
 }
 
 //// Print the Friend's likes
@@ -280,29 +278,8 @@ function printUsersLikes(friendId) {
 
 
 
-//Compatibility
-function compatibility(){
-    for (var i = 0; i<friends.length; i++){
-        
-        //se têm a mesma densidade de likes
-        if (user.likesName.length >= 0.8*friends[i].commonLikesNames.length && user.likesName.length <= 1.2*friends[i].commonLikesNames.length) {
-            friends[i].magicNumber = friends[i].magicNumber + 5;   
-        }
-        
-        else {
-            friends[i].magicNumber = friends[i].magicNumber + 1;
-        }
 
-        //se têm gostos semelhantes
-        friends[i].magicNumber = friends[i].magicNumber + friends[i].commonLikesNames.length;
-        
-        console.log("tu e "+ friends[i].name +" são assim tão compativeis: " + friends[i].magicNumber);
-        
-        //proximidade geográfica
-        
-        
-    } 
-}
+
 
 
 
