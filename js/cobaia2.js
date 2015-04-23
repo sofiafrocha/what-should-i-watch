@@ -1,6 +1,3 @@
-var printedFriendsLikes = false;
-var f;
-
 var friends = [];
 
 var user = {
@@ -9,6 +6,7 @@ var user = {
     friendsNames: [],
     friendsIDs: []
 }
+
 
 // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -23,6 +21,18 @@ var user = {
       testAPI();
 
       getUsersLikes();
+      //setTimeout("javascript function", milliseconds);
+      setTimeout(getUsersFriends, 1000);
+      setTimeout(printUsersFriends, 1500);
+      setTimeout(getAllLikes, 2000);
+      setTimeout(compareLikes, 2500);
+      setTimeout(printUsersLikes, 2500);
+      setTimeout(printFriendsLikes, 2500);
+      setTimeout(setCompatibility, 2500);
+      setTimeout(printCommonLikes, 3000);
+      setTimeout(printCompatibility, 3000)
+      
+
 
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -121,7 +131,6 @@ function getUsersLikes() {
                 }
 
                 console.log("1 - getUsersLikes - API RESPONDED");
-                getUsersFriends();
                 
             }
             //console.log("1 - getUsersLikes - user.likesName: " + user.likesName);
@@ -152,8 +161,6 @@ function getUsersFriends() {
                 console.log("2 - getUsersFriends - user.friendsNames: " + user.friendsNames);
                 console.log("2 - getUsersFriends - user.friendsIDs: " + user.friendsIDs);
 
-                printUsersFriends();
-
                 console.log("2 - getUsersFriends - END");
             }
         }
@@ -163,6 +170,7 @@ function getUsersFriends() {
 // Print User's Friends
 
 function printUsersFriends() {
+    console.log("3 - printUsersFriends - START");
     //console.log("hello?");
 
     $('.user').append('<div class="large-3 columns"></div>');
@@ -177,74 +185,50 @@ function printUsersFriends() {
         $('body').append('<div class="row ' + user.friendsIDs[i] + '"></div>');
     }
 
-    getFriendsLikes();
+    console.log("3 - printUsersFriends - END");
 }
 
 // For every friend
 //// Get the friend's likes
 
-function getFriendsLikes() {
+function getFriendsLikes(element, index, array) {
 
-    var tempIDs = [];
-    var tempNames = [];
-    var temp1;
-    var temp2;
+    console.log("4 - getFriendsLikes - START");
 
-    //console.log("ISTO " + friends);
-    //console.log("ESTE " + friends[0]);
-    //console.log("AQUI " + friends[0].name);
-
-    for (var i = 0; i < user.friendsNames.length; i++) {
-
-        //console.log("SIM?: " + friends[i]);
-
-        f = friends[i];
         
-        FB.api("/" + f.id + "/likes",
-            function(response) {
-                if (response && !response.error) {
+    FB.api("/" + element.id + "/likes",
+        function(response) {
+            //f = i;
+            if (response && !response.error) {
 
-                    for (var j = 0; j < response.data.length; j++) {
-                        //console.log("are you running?");
-                        
-                        //console.log(response.data[j].id);
+                for (var j = 0; j < response.data.length; j++) {
 
-                        temp1 = response.data[j].id;
-                        temp2 = response.data[j].name;
+                    element.likesNames.push(response.data[j].name);
+                    element.likesIDs.push(response.data[j].id);
 
-                        tempIDs.push(temp1);
-                        tempNames.push(temp2);
-
-                    }
-                    //console.log("tempIDs[0]: " + tempIDs[0]);
-                    //console.log("tempIDs[1]: " + tempIDs[1]);
-
-                    //console.log("f.id: " + f.id);
-                    //console.log("f.likesNames: " + f.likesNames);
-
-                    //console.log("ISTO ISTO " + friends);
-                    //console.log("i: " + i);
-
-                    //console.log("ISTO TAMBÉM " + f);
                 }
 
-                compareLikes(f);
-                //printFriendsLikes(f.id, f.name, f.likesNames);
+                console.log("4 - getFriendsLikes - element.likesNames: " + element.likesNames);
+
             }
-        );
 
-        friends[i].likesNames = tempNames;
-        friends[i].likesIDs = tempIDs;
-    }
+            console.log("4 - getFriendsLikes - API RESPONDED");
+        }
+    );
 
-    printUsersLikes();
+    console.log("4- getFriendsLikes - END");
+}
+
+function getAllLikes() {
+
+    friends.forEach(getFriendsLikes);
 }
 
 
 //// Compare the likes
-function compareLikes(ff) {
+function compareLikes() {
 
-    console.log("comparar!!");
+    console.log("5 - compareLikes - START");
 
     for (var i = 0; i < friends.length; i++) {
 
@@ -268,13 +252,15 @@ function compareLikes(ff) {
 
         }
     }
+
+    console.log("5 - compareLikes - END");
 }
 
 //// Print the User's likes
 
 function printUsersLikes() {
 
-  console.log("vamos imprimir!");
+    console.log("6 - printUsersLikes - START");
 
     for (var k = 0; k < user.friendsIDs.length; k++) {
         $('.' + user.friendsIDs[k]).append('<div class="large-4 columns user-likes"><h4>My Likes</h4><ul></ul></div>');
@@ -284,38 +270,53 @@ function printUsersLikes() {
         }
     }
     
+    console.log("6 - printUsersLikes - END");
     //compatibility();
 }
 
 //// Print the Friend's likes
 
-function printFriendsLikes(id, name, likesNames) {
+function printFriendsLikes() {
 
-    console.log("vamos imprimir os likes dos miguitos!");
-
-    //if (printedFriendsLikes === false) {
+    console.log("7 - printUsersLikes - START");
 
 
-            console.log("likes deste amigo: " + likesNames);
-            $('.' + id).append('<div class="large-4 columns friend-likes"><h4>' + name + ' Likes</h4><ul></ul></div>');
-        
-            for (var i = 0; i < likesNames.length; i++) {
-                $('.' + id + ' .friend-likes ul').append('<li>' + likesNames[i] + '</li>');
-            }
+    for (var k = 0; k < friends.length; k++) {
 
-        //printedFriendsLikes = true;
+        console.log("7 - likes deste amigo: " + friends[k].likesNames);
+        console.log("7 - printUsersLikes  - id deste amigo: " + friends[k].id);
 
-    //}
 
+        $('.' + friends[k].id).append('<div class="large-4 columns friend-likes"><h4>' + friends[k].name + ' Likes</h4><ul></ul></div>');
+    
+        for (var i = 0; i < friends[k].likesNames.length; i++) {
+            $('.' + friends[k].id + ' .friend-likes ul').append('<li>' + friends[k].likesNames[i] + '</li>');
+        }
+    }
+
+
+    console.log("7 - printUsersLikes - START");
     //compatibility();
 }
 
 //// Print the comparison
 
+function printCommonLikes() {
+
+    console.log("8 - printCommonLikes - START");
+
+    for (var i = 0; i < friends.length; i++) {
+        $('.' + friends[i].id).append('<div class="large-4 columns common-likes"><h4>Common Likes</h4><ul></ul></div>');
+    
+        for (var k = 0; k < friends[i].commonLikesNames.length; k++) {
+            $('.' + friends[i].id + ' .common-likes ul').append('<li>' + friends[i].commonLikesNames[k] + '</li>');
+        }
+    }
+}
 
 
-//Compatibility
-function compatibility(){
+//// Calculate Compatibility
+function setCompatibility(){
     for (var i = 0; i<friends.length; i++){
         
         //se têm a mesma densidade de likes
@@ -338,7 +339,10 @@ function compatibility(){
     } 
 }
 
-
-
-
-
+//// Print compatibility
+function printCompatibility() {
+    for (var i = 0; i < friends.length; i++) {
+        $('.' + friends[i].id + ' .common-likes').append('<h4>Magic Number</h4><ul></ul>');
+        $('.' + friends[i].id + ' .common-likes ul:nth-child(4)').append('<li>' + friends[i].magicNumber + '</li>');
+    }
+}
