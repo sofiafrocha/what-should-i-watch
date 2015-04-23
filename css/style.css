@@ -1,24 +1,30 @@
-.sofia {
-    fill: hotPink;
-    background: hotPink;   
-}
 
-.joaquina {
-    fill: Cyan;
-    background: Cyan;   
-}
-
-.emanuelina {
-    fill: Yellow;
-    background: Yellow;   
-}
 
 body {
     background-color: DarkSlateBlue;
-    color: white;
+    color: White;
+    font-family: "Gentium Book Basic", serif;
+    font-size: 12px;
+}
+
+circle {
+    fill: Gold;
+}
+
+h1, h3, h5 {
+    font-family: "PT Mono";
+    color: Tomato; 
+    text-transform: uppercase;
+}
+
+h2, h4, h6 {
+    font-family: "PT Mono";
+    color: Cyan; 
+    text-transform: uppercase;
 }
 
 text {
-    font-family: Comic Sans MS; 
-    font-size: 25px;
+    font-family: "PT Mono", sans-serif; 
+    font-size: 20px;
+    text-transform: uppercase;
 }
