@@ -4,9 +4,14 @@ var user = {
     likesName: [],
     likesID: [],
     friendsNames: [],
-    friendsIDs: []
+    friendsIDs: [],
+    moviesNames: [],
+    moviesIDs: []
 }
 
+var mostCompatibleName;
+var mostCompatibleID;
+var mostCompatibleIndex;
 
 // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -17,21 +22,19 @@ var user = {
     // Full docs on the response object can be found in the documentation
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      testAPI();
+        // Logged into your app and Facebook.
+        testAPI();
 
-      getUsersLikes();
-      //setTimeout("javascript function", milliseconds);
-      setTimeout(getUsersFriends, 1000);
-      setTimeout(printUsersFriends, 1500);
-      setTimeout(getAllLikes, 2000);
-      setTimeout(compareLikes, 2500);
-      setTimeout(printUsersLikes, 2500);
-      setTimeout(printFriendsLikes, 2500);
-      setTimeout(setCompatibility, 2500);
-      setTimeout(printCommonLikes, 3000);
-      setTimeout(printCompatibility, 3000)
-      
+        getUsersLikes();
+        //setTimeout("javascript function", milliseconds);
+
+        setTimeout(getUsersFriends, 1000);
+        setTimeout(printUsersFriends, 1500);
+        setTimeout(getAllLikes, 2000);
+        setTimeout(compareLikes, 3500);
+        setTimeout(printSuggestions, 4500);
+        setTimeout(getUsersMovies, 4500);
+        setTimeout(printUsersMovies,5000);
 
 
     } else if (response.status === 'not_authorized') {
@@ -141,6 +144,48 @@ function getUsersLikes() {
     );
 }
 
+// Get User's Movies
+
+function getUsersMovies() {
+
+    console.log("1 a) - getUsersMovies - START");
+
+    FB.api(
+    "/me/video.watches", function (response) {
+        if (response && !response.error) {
+            for (var i = 0; i < response.data.length; i++) {
+                //console.log("i: " + i);
+                if (response.data[i].application.name === "Movies") {
+                    //console.log("passinhos pequeninos!" + response.data[i].data.movie.url);
+                    console.log("passinhos pequeninos!" + response.data[i].data.movie.title);
+                    //console.log("passinhos pequeninos!" + response.data[i].data.movie.id);
+                    
+                    user.moviesNames.push(response.data[i].data.movie.title);
+                    user.moviesIDs.push(response.data[i].data.movie.id);
+                }
+            }
+
+        }
+    });
+
+    console.log("1 a) - getUsersMovies - END");
+}
+
+// Print User's Movies
+
+function printUsersMovies() {
+
+    console.log("1 b) - printUsersMovies - START");
+    console.log(user.moviesNames);
+
+    $('.user').append('<div class="large-4 columns"><h4>Your Movies</h4><ul></ul></div>');
+    for (var i = 0; i < user.moviesNames.length; i++) {
+        $('.user .columns ul').append('<li>' + user.moviesNames[i] + '</li>');
+    }
+
+    console.log("1 b) - printUsersMovies - START");
+}
+
 // Get User's Friends
 function getUsersFriends() {
     console.log("2 - getUsersFriends - START");
@@ -153,7 +198,7 @@ function getUsersFriends() {
                     user.friendsNames.push(response.data[i].name);
                     user.friendsIDs.push(response.data[i].id);
 
-                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [] };
+                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [], moviesNames: [], moviesIDs: [] };
                     friends.push(temp);
                 }
 
@@ -254,6 +299,7 @@ function compareLikes() {
     }
 
     console.log("5 - compareLikes - END");
+    printUsersLikes();
 }
 
 //// Print the User's likes
@@ -271,7 +317,7 @@ function printUsersLikes() {
     }
     
     console.log("6 - printUsersLikes - END");
-    //compatibility();
+    printFriendsLikes();
 }
 
 //// Print the Friend's likes
@@ -296,7 +342,7 @@ function printFriendsLikes() {
 
 
     console.log("7 - printUsersLikes - START");
-    //compatibility();
+    printCommonLikes();
 }
 
 //// Print the comparison
@@ -312,11 +358,16 @@ function printCommonLikes() {
             $('.' + friends[i].id + ' .common-likes ul').append('<li>' + friends[i].commonLikesNames[k] + '</li>');
         }
     }
+
+    setCompatibility();
 }
 
 
 //// Calculate Compatibility
-function setCompatibility(){
+function setCompatibility() {
+
+    console.log("9 - setCompatibility - START");
+
     for (var i = 0; i<friends.length; i++){
         
         //se têm a mesma densidade de likes
@@ -336,13 +387,91 @@ function setCompatibility(){
         //proximidade geográfica
         
         
-    } 
+    }
+
+    console.log("9 - setCompatibility - END");
+    printCompatibility();
 }
 
 //// Print compatibility
 function printCompatibility() {
+
+    console.log("10 - printCompatibility - START");
+
     for (var i = 0; i < friends.length; i++) {
         $('.' + friends[i].id + ' .common-likes').append('<h4>Magic Number</h4><ul></ul>');
         $('.' + friends[i].id + ' .common-likes ul:nth-child(4)').append('<li>' + friends[i].magicNumber + '</li>');
     }
+
+    console.log("10 - printCompatibility - END");
+
+    getMostCompatible();
+}
+
+//// Determine most compatible person
+
+function getMostCompatible() {
+
+    console.log("11 - getMostCompatible - START");
+
+    var temp = 0;
+
+    for (var i = 0; i < friends.length; i++) {
+        if (friends[i].magicNumber > temp) {
+
+            temp = friends[i].magicNumber;
+            mostCompatibleName = friends[i].name;
+            mostCompatibleID = friends[i].id;
+            mostCompatibleIndex = i;
+
+        }
+    }
+
+    console.log("11 - getMostCompatible - END");
+    getAllMovies();
+}
+
+function getAllMovies(){
+    console.log("12 - getAllMovies - START");
+    friends.forEach(getMovies);
+    console.log("12 - getAllMovies - END");
+}
+
+function getMovies(element, index, array) {
+
+    console.log("13 - getMovies - START");
+
+    FB.api(
+    "/" + element.id + "/video.watches", function (response) {
+        if (response && !response.error) {
+            for (var i = 0; i < response.data.length; i++) {
+                //console.log("i: " + i);
+                if (response.data[i].application.name === "Movies") {
+                    //console.log("passinhos pequeninos!" + response.data[i].data.movie.url);
+                    //console.log("passinhos pequeninos!" + response.data[i].data.movie.title);
+                    //console.log("passinhos pequeninos!" + response.data[i].data.movie.id);
+                    
+                    element.moviesNames.push(response.data[i].data.movie.title);
+                    element.moviesIDs.push(response.data[i].data.movie.id);
+                }
+            }
+
+        }
+    });
+
+    console.log("13 - getMovies - end");
+}
+
+function printSuggestions() {
+    console.log("14 - printSuggestions - START");
+
+    $('body').append('<div class="row suggestion"></div>');
+    $('.suggestion').append('<div class="large-8 columns"><h4>Suggested Likes</h4><ul></ul></div>');
+
+    for (var i = 0; i < friends[mostCompatibleIndex].moviesNames.length; i++) {
+        $('.suggestion .columns ul').append('<li>' + friends[mostCompatibleIndex].moviesNames[i] + '</li>');
+
+    }
+
+    console.log("14 - printSuggestions - END");
 }
