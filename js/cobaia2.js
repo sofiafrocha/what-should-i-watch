@@ -1,3 +1,6 @@
+var printedFriendsLikes = false;
+var f;
+
 var friends = [];
 
 var user = {
@@ -169,6 +172,9 @@ function printUsersFriends() {
     for (var i = 0; i < user.friendsNames.length; i++) {
         $('.user-friends').append('<li>' + user.friendsNames[i] + '</li>');
         //console.log("user.friendsNames[i]: " + user.friendsNames[i]);
+
+        //criar todas as linhas necessárias, onde vamos por os likes do user, os do amigo e os em comum
+        $('body').append('<div class="row ' + user.friendsIDs[i] + '"></div>');
     }
 
     getFriendsLikes();
@@ -184,15 +190,17 @@ function getFriendsLikes() {
     var temp1;
     var temp2;
 
-    console.log("ISTO " + friends);
-    console.log("ESTE " + friends[0]);
-    console.log("AQUI " + friends[0].name);
+    //console.log("ISTO " + friends);
+    //console.log("ESTE " + friends[0]);
+    //console.log("AQUI " + friends[0].name);
 
     for (var i = 0; i < user.friendsNames.length; i++) {
 
-        console.log("SIM?: " + friends[i]);
+        //console.log("SIM?: " + friends[i]);
+
+        f = friends[i];
         
-        FB.api("/" + friends[i].id + "/likes",
+        FB.api("/" + f.id + "/likes",
             function(response) {
                 if (response && !response.error) {
 
@@ -211,26 +219,30 @@ function getFriendsLikes() {
                     //console.log("tempIDs[0]: " + tempIDs[0]);
                     //console.log("tempIDs[1]: " + tempIDs[1]);
 
-                    //console.log("friends[i].id: " + friends[i].id);
-                    //console.log("friends[i].likesNames: " + friends[i].likesNames);
+                    //console.log("f.id: " + f.id);
+                    //console.log("f.likesNames: " + f.likesNames);
 
                     //console.log("ISTO ISTO " + friends);
                     //console.log("i: " + i);
 
-                    //console.log("ISTO TAMBÉM " + friends[i]);
+                    //console.log("ISTO TAMBÉM " + f);
                 }
 
-                compareLikes();
+                compareLikes(f);
+                //printFriendsLikes(f.id, f.name, f.likesNames);
             }
         );
 
         friends[i].likesNames = tempNames;
         friends[i].likesIDs = tempIDs;
-    }   
+    }
+
+    printUsersLikes();
 }
 
+
 //// Compare the likes
-function compareLikes() {
+function compareLikes(ff) {
 
     console.log("comparar!!");
 
@@ -250,31 +262,53 @@ function compareLikes() {
                     friends[i].commonLikesIDs.push(user.likesID[k]);
                     friends[i].commonLikesNames.push(user.likesName[k]);
 
-                    console.log("os em comum actuais são: " + friends[i].commonLikesNames);
+                    //console.log("os em comum actuais são: " + friends[i].commonLikesNames);
                 }
             }
 
         }
-
     }
-
-    printUsersLikes(0);
 }
 
 //// Print the User's likes
 
-function printUsersLikes(friendId) {
-    $('.' + friendId).append('<div class="large-4 user-likes"></div>');
-    $('.' + friendId + ' .user-likes').append('<ul></ul>');
+function printUsersLikes() {
 
-    for (var i = 0; i < user.likesName.length; i++) {
-        $('.' + friendId + ' .user-likes ul').append('<li>' + user.likesName[i] + '</li>');
+  console.log("vamos imprimir!");
+
+    for (var k = 0; k < user.friendsIDs.length; k++) {
+        $('.' + user.friendsIDs[k]).append('<div class="large-4 columns user-likes"><h4>My Likes</h4><ul></ul></div>');
+    
+        for (var i = 0; i < user.likesName.length; i++) {
+            $('.' + user.friendsIDs[k] + ' .user-likes ul').append('<li>' + user.likesName[i] + '</li>');
+        }
     }
     
-    compatibility();
+    //compatibility();
 }
 
 //// Print the Friend's likes
+
+function printFriendsLikes(id, name, likesNames) {
+
+    console.log("vamos imprimir os likes dos miguitos!");
+
+    //if (printedFriendsLikes === false) {
+
+
+            console.log("likes deste amigo: " + likesNames);
+            $('.' + id).append('<div class="large-4 columns friend-likes"><h4>' + name + ' Likes</h4><ul></ul></div>');
+        
+            for (var i = 0; i < likesNames.length; i++) {
+                $('.' + id + ' .friend-likes ul').append('<li>' + likesNames[i] + '</li>');
+            }
+
+        //printedFriendsLikes = true;
+
+    //}
+
+    //compatibility();
+}
 
 //// Print the comparison
 
