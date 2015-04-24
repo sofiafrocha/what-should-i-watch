@@ -1,76 +1,69 @@
-var data = {"friends_list": {
-    "Sofia": 18, 
-    "Joaquina": 15, 
-    "Emanuelina": 55
-}};
+setTimeout(graph, 6500);
+setTimeout(getUserPhotos, 7000);
 
-var friends_list = [
-    {
-        "name" : Sofia,
-        "magicNumber" : 18
-    }, {
-        "name" : Joaquina,
-        "magicNumber" : 15
-    }, {
-        "name" : Emanuelina,
-        "magicNumber" : 35
-    }
-];
+function graph(d, data) { 
+    console.log("I haz begun");
+    
+    var diameter = 400;
 
-(function() { 
-	
-  // D3 Bubble Chart 
+    var svg = d3.select('#chart').append('svg')
+        .attr('width', 3*diameter)
+        .attr('height', diameter);
 
-	var diameter = 600;
+    var bubble = d3.layout.pack()
+        .size([diameter, diameter])
+        .value(function(d) {return d.magicNumber;}) // new data is loaded to bubble layout
+        .padding(3)
+        .sort(d3.descending);
 
-	var svg = d3.select('#chart').append('svg')
-		.attr('width', diameter)
-		.attr('height', diameter);
+    // generate data with calculated layout values
+    var nodes = bubble.nodes(friends_list)
+        .filter(function(d) { return !d.children; }); // filter out the outer bubble
 
-	var bubble = d3.layout.pack()
-		.size([diameter, diameter])
-		.value(function(d) {return d.size;}) // new data is loaded to bubble layout
-		.padding(3);
+    // assign new data to existing DOM 
+    var vis = svg.selectAll('circle')
+        .data(friends_list);
+        
+    var elem = svg.selectAll("g bubbleText")
+        .data(nodes, function(d) { return d.name; });
 
-		// generate data with calculated layout values
-		var nodes = bubble.nodes(processData(data))
-			.filter(function(d) { return !d.children; }); // filter out the outer bubble
+    var elemEnter = vis.enter()
+        .append("g")
 
-		// assign new data to existing DOM 
-		var vis = svg.selectAll('circle')
-			.data(nodes, function(d) { return d.name; });
-
-            
-        var elem = svg.selectAll("g bubbleText")
-            .data(processData(data));
-
-        var elemEnter = vis.enter()
-            .append("g")
-
+    for (var i = 0; i < friends_list.length; i++) {        
         var circle = elemEnter.append("circle")
-            .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
-            .attr("r", function(d){return d.r} )
+            .attr('transform', function(d) { return 'translate(' + (i+0.1)*1000/friends_list.length + ',' + 400/friends_list.length + ')' })
+            .attr("r", function(d){return 2*friends_list[i].magicNumber} )
             .attr("stroke","black")
-            .attr('class', function(d) { return d.className; });
+            .attr('class', function(d) { return friends_list[i].name });
+
 
         elemEnter.append("text")
-            .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
-            .attr("dx", function(d){return -0.5*d.r})
-            .text(function(d){return d.name});
+            .attr('transform', function(d) { return 'translate(' + i*1000/friends_list.length + ',' + (-50+(400/friends_list.length)) + ')' })
+            .attr("dx", function(d){return (-1)*0,1*friends_list[i].magicNumber})
+            .text(function(d){return friends_list[i].name});
 
+    }
+    
+    console.log("I iz done");
+};
 
-        function processData(data) {
-            if(!data) return;
-
-            var obj = data.friends_list;
-
-            var newDataSet = [];
-
-            for(var prop in obj) {
-                newDataSet.push({name: prop, className: prop.toLowerCase().replace(/ /g,''), size: obj[prop]});
+function getUserPhotos(){
+    console.log("ME ME ME ME ME ME ME ");
+    
+    for (var i = 0; i < friends_list.length; i++){
+        console.log("ME ME ME ME PART II"); 
+        FB.api(
+        "/"+friends[i].id+"/picture",
+        function (response) {
+            if (response && !response.error) {
+                console.log("ME ME ME ME PART III"); 
+                //for (var j = 0; j < response.data.length; j++) {
+                    friends_list.photos.push(response.data.photo);
+                    console.log("LOOOK AT MEEEEEE "+response.data);
+                //}
             }
-            return {children: newDataSet};
         }
-
-
-})();
+        );   
+    }
+}

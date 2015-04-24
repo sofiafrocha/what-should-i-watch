@@ -1,5 +1,7 @@
 var friends = [];
 
+var friends_list = [];
+
 var user = {
     likesName: [],
     likesID: [],
@@ -200,6 +202,9 @@ function getUsersFriends() {
 
                     var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [], moviesNames: [], moviesIDs: [] };
                     friends.push(temp);
+
+                    var temp2 = { name: response.data[i].name, magicNumber : 0 , photo: ""};
+                    friends_list.push(temp2);
                 }
 
                 console.log("2 - getUsersFriends - API RESPONDED");
@@ -383,6 +388,8 @@ function setCompatibility() {
         friends[i].magicNumber = friends[i].magicNumber + friends[i].commonLikesNames.length;
         
         console.log("tu e "+ friends[i].name +" são assim tão compativeis: " + friends[i].magicNumber);
+
+        friends_list[i].magicNumber = friends[i].magicNumber;
         
         //proximidade geográfica
         
