@@ -1,7 +1,5 @@
 var friends = [];
 
-var friends_list = [];
-
 var user = {
     likesName: [],
     likesID: [],
@@ -33,6 +31,7 @@ var mostCompatibleIndex;
         setTimeout(getUsersFriends, 1000);
         setTimeout(printUsersFriends, 1500);
         setTimeout(getAllLikes, 2000);
+        setTimeout(getAllPhotos, 2000);
         setTimeout(compareLikes, 3500);
         setTimeout(printSuggestions, 4500);
         setTimeout(getUsersMovies, 4500);
@@ -200,11 +199,9 @@ function getUsersFriends() {
                     user.friendsNames.push(response.data[i].name);
                     user.friendsIDs.push(response.data[i].id);
 
-                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [], moviesNames: [], moviesIDs: [], photo: "" };
+                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [], moviesNames: [], moviesIDs: [], photo: [] };
                     friends.push(temp);
 
-                    var temp2 = { name: response.data[i].name, magicNumber : 0 , photo: ""};
-                    friends_list.push(temp2);
                 }
 
                 console.log("2 - getUsersFriends - API RESPONDED");
@@ -388,8 +385,6 @@ function setCompatibility() {
         friends[i].magicNumber = friends[i].magicNumber + friends[i].commonLikesNames.length;
         
         console.log("tu e "+ friends[i].name +" são assim tão compativeis: " + friends[i].magicNumber);
-
-        friends_list[i].magicNumber = friends[i].magicNumber;
         
         //proximidade geográfica
         
@@ -481,4 +476,25 @@ function printSuggestions() {
     }
 
     console.log("14 - printSuggestions - END");
+}
+
+function getFriendsPhotos(element, index, array) {
+    console.log("5 b) - getFriendsPhotos - START");
+
+    FB.api("/" + friends[index].id + "/picture",
+        function (response) {
+            if (response && !response.error) {
+                console.log(response.data.url);
+
+                friends[index].photo.push(response.data.url);
+            }
+
+            console.log("5 b) - getFriendsPhotos - API RESPONDED");
+        }
+    );
+    console.log("5 b) - getFriendsPhotos - END");
+}
+
+function getAllPhotos() {
+    friends.forEach(getFriendsPhotos);
 }
