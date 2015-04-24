@@ -37,7 +37,7 @@ function bolinhas() {
         .size([1000, 600]);
 
 	nodes = [
-		{x: 400, y: 200, r: 14}
+		{x: 500, y: 300, r: 14}
 	];
 
 	var tempX;
@@ -49,8 +49,8 @@ function bolinhas() {
 		//tempX = Math.floor(Math.random() * (900 - 0 + 1)) + 0;
 		//tempY = Math.floor(Math.random() * (400 - 0 + 1)) + 0;
 
-		tempX = 400+300*Math.sin(tempAng * i);
-		tempY = 200+120*Math.cos(tempAng * i);
+		tempX = 500+300*Math.sin(tempAng * i);
+		tempY = 300+120*Math.cos(tempAng * i);
 
 		nodes.push({x: tempX, y: tempY, r: friendsJSON[i].target});
 	}
@@ -68,11 +68,22 @@ function bolinhas() {
 	}
 
 	var vis = d3.select("#chart").append('svg');
-	vis.attr("width", 1000).attr("height", 400);
+	vis.attr("width", 1000).attr("height", 600);
     
      force
         .start();              
       
+    force.on("tick", function() {
+        vis.selectAll(".line")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("x1", function(d) { return d.source.x })
+            .attr("y1", function(d) { return d.source.y })
+            .attr("x2", function(d) { return d.target.x })
+            .attr("y2", function(d) { return d.target.y })
+            .style("stroke", "rgb(6,120,155)");
+    });
 
 	vis.selectAll("circle.nodes")
 	  .data(nodes)
@@ -90,17 +101,6 @@ function bolinhas() {
 		    .text(labels[i]);
 	}
 
-    force.on("tick", function() {
-        vis.selectAll(".line")
-            .data(links)
-            .enter()
-            .append("line")
-            .attr("x1", function(d) { return d.source.x })
-            .attr("y1", function(d) { return d.source.y })
-            .attr("x2", function(d) { return d.target.x })
-            .attr("y2", function(d) { return d.target.y })
-            .style("stroke", "rgb(6,120,155)");
-    });
 
     var node = vis.selectAll("circle.nodes");
 
