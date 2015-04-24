@@ -19,8 +19,12 @@ var friendsJSON = [];
 function resgate() {
     for (var i = 0; i < friends.length; i++) {
         var temp = {
-            "source" : 300,
-            "target" : 5+friends[i].magicNumber
+            "source" : 0,
+            "target" : 5*friends[i].magicNumber,
+            "x": "",
+            "y": "",
+            "size": 5*friends[i].magicNumber,
+            "label": friends[i].name
         }
 
         friendsJSON.push(temp);
@@ -506,6 +510,8 @@ function printSuggestions() {
     }
 
     console.log("14 - printSuggestions - END");
+
+    resgate();
 }
 
 function getFriendsPhotos(element, index, array) {
