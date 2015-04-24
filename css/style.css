@@ -19,8 +19,28 @@ h1, h3, h5 {
 
 h2, h4, h6 {
     font-family: "PT Mono";
+    font-size: 20px;
     color: Cyan; 
     text-transform: uppercase;
+}
+
+body .btn {
+    font-family: "PT Mono", sans-serif;
+    margin-top: 30px; 
+    font-size: 17px;
+    padding: 18px;
+    color: gold;
+    border: medium dashed gold;
+}
+
+body .btn:hover {
+    color: white;
+    border: medium dashed white;
+    text-decoration: underline;
+}
+
+#status {
+    margin-bottom: 40px;
 }
 
 text {
@@ -35,15 +55,14 @@ svg {
 }
 
 .landing-page {
-    height: 100vh;
-    background-color: green;
+    height: 110vh;
     text-align: center;
 }
 
 .landing-page h1 {
     text-align: center;
     font-size: 70px;
-    padding-top: 40%;
+    padding-top: 50%;
 }
 
 .fb_iframe_widget {

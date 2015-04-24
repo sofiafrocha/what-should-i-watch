@@ -26,6 +26,8 @@ var mostCompatibleIndex;
         // Logged into your app and Facebook.
         testAPI();
 
+        $('.fb_iframe_widget').hide();
+
         getUsersLikes();
         //setTimeout("javascript function", milliseconds);
 
@@ -105,7 +107,7 @@ var mostCompatibleIndex;
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
+        '<h4>Thanks for logging in, ' + response.name + '!</h4>';
     });
   }
 
