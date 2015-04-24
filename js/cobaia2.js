@@ -19,8 +19,8 @@ var friendsJSON = [];
 function resgate() {
     for (var i = 0; i < friends.length; i++) {
         var temp = {
-            "source" : 0,
-            "target" : 5*friends[i].magicNumber
+            "source" : 300,
+            "target" : 5+friends[i].magicNumber
         }
 
         friendsJSON.push(temp);
