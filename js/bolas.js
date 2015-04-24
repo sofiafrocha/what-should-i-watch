@@ -1,5 +1,5 @@
 setTimeout(graph, 6500);
-setTimeout(getUserPhotos, 7000);
+setTimeout(getAllPhotos, 7000);
 
 function graph(d, data) { 
     console.log("I haz begun");
@@ -48,22 +48,48 @@ function graph(d, data) {
     console.log("I iz done");
 };
 
+function getFriendsPhotos(element, index, array) {
+    console.log("getFriendsPhotos - START");
+
+    FB.api("/" + friends[index].id + "/picture",
+        function (response) {
+            if (response && !response.error) {
+                
+                console.log("ME ME ME ME PART III");
+                console.log(response.data.url);
+
+                friends[index].push(response.data.url);
+            }
+        }
+    );
+
+}
+
+function getAllPhotos() {
+    friends.forEach(getFriendsPhotos);
+}
+
+/*
 function getUserPhotos(){
     console.log("ME ME ME ME ME ME ME ");
     
     for (var i = 0; i < friends_list.length; i++){
         console.log("ME ME ME ME PART II"); 
         FB.api(
-        "/"+friends[i].id+"/picture",
+        "/" + friends[i].id + "/picture",
         function (response) {
             if (response && !response.error) {
                 console.log("ME ME ME ME PART III"); 
                 //for (var j = 0; j < response.data.length; j++) {
-                    friends_list.photos.push(response.data.photo);
-                    console.log("LOOOK AT MEEEEEE "+response.data);
+                    console.log(friends_list[0].photo);
+                    //friends_list.photo.push(response.data.url);
+                    //console.log("LOOOK AT MEEEEEE " + response.data);
                 //}
             }
         }
-        );   
+        );
     }
-}
+
+    friends.forEach()
+
+} */

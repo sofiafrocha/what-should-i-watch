@@ -200,7 +200,7 @@ function getUsersFriends() {
                     user.friendsNames.push(response.data[i].name);
                     user.friendsIDs.push(response.data[i].id);
 
-                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [], moviesNames: [], moviesIDs: [] };
+                    var temp = { name: response.data[i].name, id: response.data[i].id, likesNames: [], likesIDs: [], commonLikesNames: [], commonLikesIDs: [], magicNumber: [], moviesNames: [], moviesIDs: [], photo: "" };
                     friends.push(temp);
 
                     var temp2 = { name: response.data[i].name, magicNumber : 0 , photo: ""};
