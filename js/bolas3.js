@@ -31,10 +31,13 @@ function bolinhas() {
 		];
 	*/
 
-
+    var force = d3.layout.force()
+        .charge(-120)
+        .linkDistance(40)
+        .size([1000, 600]);
 
 	nodes = [
-		{x: 450, y: 200, r: 14}
+		{x: 400, y: 200, r: 14}
 	];
 
 	var tempX;
@@ -46,8 +49,8 @@ function bolinhas() {
 		//tempX = Math.floor(Math.random() * (900 - 0 + 1)) + 0;
 		//tempY = Math.floor(Math.random() * (400 - 0 + 1)) + 0;
 
-		tempX = 450+100*Math.sin(tempAng * i);
-		tempY = 200+100*Math.cos(tempAng * i);
+		tempX = 400+300*Math.sin(tempAng * i);
+		tempY = 200+120*Math.cos(tempAng * i);
 
 		nodes.push({x: tempX, y: tempY, r: friendsJSON[i].target});
 	}
@@ -65,7 +68,11 @@ function bolinhas() {
 	}
 
 	var vis = d3.select("#chart").append('svg');
-	vis.attr("width", 900).attr("height", 400);
+	vis.attr("width", 1000).attr("height", 400);
+    
+     force
+        .start();              
+      
 
 	vis.selectAll("circle.nodes")
 	  .data(nodes)
@@ -74,7 +81,7 @@ function bolinhas() {
 	  .attr("cx", function(d) { return d.x; })
 	  .attr("cy", function(d) { return d.y; })
 	  .attr("r", function(d) { return d.r; })
-	  .attr("fill", "black");
+	  .attr("fill", "white");
 
 	for (var i = 0; i < labels.length; i++) {
 		vis.append("text")
@@ -83,14 +90,33 @@ function bolinhas() {
 		    .text(labels[i]);
 	}
 
-	vis.selectAll(".line")
-		.data(links)
-		.enter()
-		.append("line")
-		.attr("x1", function(d) { return d.source.x })
-		.attr("y1", function(d) { return d.source.y })
-		.attr("x2", function(d) { return d.target.x })
-		.attr("y2", function(d) { return d.target.y })
-		.style("stroke", "rgb(6,120,155)");
+    force.on("tick", function() {
+        vis.selectAll(".line")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("x1", function(d) { return d.source.x })
+            .attr("y1", function(d) { return d.source.y })
+            .attr("x2", function(d) { return d.target.x })
+            .attr("y2", function(d) { return d.target.y })
+            .style("stroke", "rgb(6,120,155)");
+    });
 
+    var node = vis.selectAll("circle.nodes");
+
+    vis.selectAll("circle.nodes").on("mouseover", function(d){
+                        
+                        d3.select(this).select("circle").transition()
+                                .duration(250)
+                                .attr("r", function(d) { return d.r*1.5; });
+                        d3.select(this).select("text")
+                        
+                })
+		
+		.on("mouseout", function(d){
+ 
+                        d3.select(this).select("circle").transition()
+                                .duration(250)
+                                .attr("r", function(d) { return d.r; });
+                });
 }
