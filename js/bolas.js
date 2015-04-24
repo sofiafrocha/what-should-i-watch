@@ -42,7 +42,6 @@ function graph(d, data) {
 		var link = container.append("g")
                         .attr("class", "links")
                         .selectAll(".link")
-        
 			.data(friendsJSON)
                         .enter().append("line")
 			.attr("class", "link")
@@ -57,25 +56,9 @@ function graph(d, data) {
                         .attr("cx", function(d) { return 700-d.x; })
                         .attr("cy", function(d) { return 50+d.y; })
                         .call(drag);
-    
-    		var me = container.append("g")
-                        .attr("class", "nodes")
-                        .selectAll(".node")
-			.data(friends)
-			.enter().append("g")
-			.attr("class", "me")
-                        .attr("cx", function(d) { return 700-d.x; })
-                        .attr("cy", function(d) { return 50+d.y; })
-                        .call(drag);
 		  
 		node.append("circle")
 			.attr("r", function(d) { return d.magicNumber * 2; })
-        
-        me.append("circle")
-			.attr("r", 15)
-            .attr("transform", function(d) { return "translate(" + 300 + "," + 0 + ")"; })
-            .style("fill", "Tomato")
-            .style("stroke", "white");
 		 
                 
                 force.on("tick", function() {
@@ -88,11 +71,6 @@ function graph(d, data) {
                 });
                     node.append("text")
                         .text(function(d) { return d.name; });
-    
-                    me.append("text")
-                        .text("YOU")
-                        .attr("transform", function(d) { return "translate(" + 300 + "," + 20 + ")"; })
-                        .style("fill", "white");
                 
                 var linkedByIndex = {};
                friendsJSON.forEach(function(d) {
