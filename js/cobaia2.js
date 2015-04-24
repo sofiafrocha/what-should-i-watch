@@ -51,7 +51,7 @@ function resgate() {
         getUsersFriends();
         getUsersPhotos();
         getUsersMovies();
-        //setTimeout("javascript function", milliseconds);
+        setTimeout(bolinhas, 6000);
 
         setTimeout(printUsersFriends, 1500);
         setTimeout(printUsersMovies,1500);
@@ -511,7 +511,6 @@ function printSuggestions() {
 
     console.log("14 - printSuggestions - END");
 
-    resgate();
 }
 
 function getFriendsPhotos(element, index, array) {
