@@ -6,7 +6,8 @@ var user = {
     friendsNames: [],
     friendsIDs: [],
     moviesNames: [],
-    moviesIDs: []
+    moviesIDs: [],
+    photo: []
 }
 
 var mostCompatibleName;
@@ -32,6 +33,7 @@ var mostCompatibleIndex;
         setTimeout(printUsersFriends, 1500);
         setTimeout(getAllLikes, 2000);
         setTimeout(getAllPhotos, 2000);
+        setTimeout(getUsersPhotos, 2000);
         setTimeout(compareLikes, 3500);
         setTimeout(printSuggestions, 4500);
         setTimeout(getUsersMovies, 4500);
@@ -497,4 +499,21 @@ function getFriendsPhotos(element, index, array) {
 
 function getAllPhotos() {
     friends.forEach(getFriendsPhotos);
+}
+
+function getUsersPhotos() {
+    console.log("5 c) - getUsersPhoto - START");
+
+    FB.api("/me/picture",
+        function (response) {
+            if (response && !response.error) {
+                console.log(response.data.url);
+
+                user.photo.push(response.data.url);
+            }
+
+            console.log("5 c) - getUsersPhoto - API RESPONDED");
+        }
+    );
+    console.log("5 c) - getUsersPhoto - END");
 }
