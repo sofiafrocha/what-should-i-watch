@@ -54,6 +54,10 @@ svg {
     margin: 20px;
 }
 
+line {
+    fill: black;   
+}
+
 .landing-page {
     height: 110vh;
     text-align: center;
@@ -67,4 +71,15 @@ svg {
 
 .fb_iframe_widget {
     font-size: 40px;
+}
+
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: 1;
 }
