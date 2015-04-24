@@ -44,17 +44,19 @@ function resgate() {
         $('.fb_iframe_widget').hide();
 
         getUsersLikes();
+        getUsersFriends();
+        getUsersPhotos();
+        getUsersMovies();
         //setTimeout("javascript function", milliseconds);
 
-        setTimeout(getUsersFriends, 1000);
         setTimeout(printUsersFriends, 1500);
-        setTimeout(getAllLikes, 2000);
+        setTimeout(printUsersMovies,1500);
+        setTimeout(getAllLikes, 1500);
+
         setTimeout(getAllPhotos, 2000);
-        setTimeout(getUsersPhotos, 2000);
-        setTimeout(compareLikes, 3500);
-        setTimeout(printSuggestions, 4500);
-        setTimeout(getUsersMovies, 4500);
-        setTimeout(printUsersMovies,5000);
+        setTimeout(compareLikes, 3000);
+        setTimeout(printSuggestions, 3800);
+        
 
         setTimeout(resgate, 5100);
 
@@ -200,7 +202,7 @@ function printUsersMovies() {
     console.log("1 b) - printUsersMovies - START");
     console.log(user.moviesNames);
 
-    $('.user').append('<div class="large-4 columns"><h4>Your Movies</h4><ul></ul></div>');
+    $('.user').append('<div class="large-3 columns"><h4>Your Movies</h4><ul></ul></div>');
     for (var i = 0; i < user.moviesNames.length; i++) {
         $('.user .columns ul').append('<li>' + user.moviesNames[i] + '</li>');
     }
@@ -241,7 +243,7 @@ function printUsersFriends() {
     console.log("3 - printUsersFriends - START");
     //console.log("hello?");
 
-    $('.user').append('<div class="large-3 columns"></div>');
+    $('.user').append('<div class="large-4 columns"></div>');
     $('.user .columns').append('<h4>Your Friends</h4>');
     $('.user .columns').append('<ul class="user-friends"></ul>');
 
@@ -455,9 +457,12 @@ function getMostCompatible() {
 }
 
 function getAllMovies(){
+
     console.log("12 - getAllMovies - START");
     friends.forEach(getMovies);
+    //console.log(friends[0].moviesNames);
     console.log("12 - getAllMovies - END");
+
 }
 
 function getMovies(element, index, array) {
@@ -473,9 +478,14 @@ function getMovies(element, index, array) {
                     //console.log("passinhos pequeninos!" + response.data[i].data.movie.url);
                     //console.log("passinhos pequeninos!" + response.data[i].data.movie.title);
                     //console.log("passinhos pequeninos!" + response.data[i].data.movie.id);
-                    
+                    //console.log(response.data[i].data.movie.title);
+                    //console.log(element);
+                    //console.log(element.moviesNames);
+
                     element.moviesNames.push(response.data[i].data.movie.title);
                     element.moviesIDs.push(response.data[i].data.movie.id);
+
+                    //console.log(element.moviesNames);
                 }
             }
 
@@ -488,11 +498,10 @@ function getMovies(element, index, array) {
 function printSuggestions() {
     console.log("14 - printSuggestions - START");
 
-    $('body').append('<div class="row suggestion"></div>');
-    $('.suggestion').append('<div class="large-8 columns"><h4>Suggested Likes</h4><ul></ul></div>');
+    $('.user').append('<div class="large-4 columns suggestion"><h4>Suggested Movies</h4><ul></ul></div>');
 
     for (var i = 0; i < friends[mostCompatibleIndex].moviesNames.length; i++) {
-        $('.suggestion .columns ul').append('<li>' + friends[mostCompatibleIndex].moviesNames[i] + '</li>');
+        $('.suggestion ul').append('<li>' + friends[mostCompatibleIndex].moviesNames[i] + '</li>');
 
     }
 
