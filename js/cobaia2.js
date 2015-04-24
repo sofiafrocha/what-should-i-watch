@@ -14,6 +14,21 @@ var mostCompatibleName;
 var mostCompatibleID;
 var mostCompatibleIndex;
 
+var friendsJSON = [];
+
+function resgate() {
+    for (var i = 0; i < friends.length; i++) {
+        var temp = {
+            "source" : 0,
+            "target" : friends[i].magicNumber
+        }
+
+        friendsJSON.push(temp);
+        console.log(temp);
+    }
+    console.log("i'm done.");
+}
+
 // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -40,6 +55,8 @@ var mostCompatibleIndex;
         setTimeout(printSuggestions, 4500);
         setTimeout(getUsersMovies, 4500);
         setTimeout(printUsersMovies,5000);
+
+        setTimeout(resgate, 5100);
 
 
     } else if (response.status === 'not_authorized') {
