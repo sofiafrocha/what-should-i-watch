@@ -1,15 +1,22 @@
-
-
 body {
     background-color: DarkSlateBlue;
     color: White;
-    font-family: "Gentium Book Basic", serif;
+    font-family: "Gentium Basic", serif;
     font-size: 12px;
 }
 
 circle {
     fill: Gold;
     stroke: white;
+}
+
+.panel {
+    height: 100vh;
+}
+
+
+li {
+    font-family: "Gentium Basic", serif;
 }
 
 h1, h3, h5 {
@@ -20,9 +27,9 @@ h1, h3, h5 {
 
 h2, h4, h6 {
     font-family: "PT Mono";
-    font-size: 20px;
     color: Cyan; 
     text-transform: uppercase;
+    text-align: center;
 }
 
 body .btn {
@@ -32,12 +39,13 @@ body .btn {
     padding: 18px;
     color: gold;
     border: medium dashed gold;
+
+    margin-right: 40px;
 }
 
 body .btn:hover {
     color: white;
     border: medium dashed white;
-    text-decoration: underline;
 }
 
 #status {
@@ -58,14 +66,13 @@ svg {
 
 
 .landing-page {
-    height: 110vh;
     text-align: center;
 }
 
 .landing-page h1 {
     text-align: center;
-    font-size: 70px;
-    padding-top: 50%;
+    font-size: 68px;
+    padding-top: 30%;
 }
 
 .fb_iframe_widget {

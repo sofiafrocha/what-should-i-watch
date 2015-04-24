@@ -16,6 +16,13 @@ var mostCompatibleIndex;
 
 var friendsJSON = [];
 
+$('.row').click(function() {
+    console.log("clicaste no btn!!!!");
+    $('.full-info').hide();
+    
+});
+
+
 function resgate() {
     for (var i = 0; i < friends.length; i++) {
         var temp = {
@@ -46,6 +53,8 @@ function resgate() {
         testAPI();
 
         $('.fb_iframe_widget').hide();
+
+        //$('.full-info').hide();
 
         getUsersLikes();
         getUsersFriends();
@@ -247,16 +256,16 @@ function printUsersFriends() {
     console.log("3 - printUsersFriends - START");
     //console.log("hello?");
 
-    $('.user').append('<div class="large-4 columns"></div>');
-    $('.user .columns').append('<h4>Your Friends</h4>');
-    $('.user .columns').append('<ul class="user-friends"></ul>');
+    $('.full-info').append('<div class="row"><div class="large-4 columns"></div></div>');
+    $('.full-info .columns').append('<h4>Your Friends</h4>');
+    $('.full-info .columns').append('<ul class="user-friends"></ul>');
 
     for (var i = 0; i < user.friendsNames.length; i++) {
         $('.user-friends').append('<li>' + user.friendsNames[i] + '</li>');
         //console.log("user.friendsNames[i]: " + user.friendsNames[i]);
 
         //criar todas as linhas necessárias, onde vamos por os likes do user, os do amigo e os em comum
-        $('body').append('<div class="row ' + user.friendsIDs[i] + '"></div>');
+        $('.full-info').append('<div class="row ' + user.friendsIDs[i] + '"></div>');
     }
 
     console.log("3 - printUsersFriends - END");
@@ -502,10 +511,8 @@ function getMovies(element, index, array) {
 function printSuggestions() {
     console.log("14 - printSuggestions - START");
 
-    $('.user').append('<div class="large-4 columns suggestion"><h4>Suggested Movies</h4><ul></ul></div>');
-
     for (var i = 0; i < friends[mostCompatibleIndex].moviesNames.length; i++) {
-        $('.suggestion ul').append('<li>' + friends[mostCompatibleIndex].moviesNames[i] + '</li>');
+        $('#dois .columns ul').append('<li>' + friends[mostCompatibleIndex].moviesNames[i] + '</li>');
 
     }
 
