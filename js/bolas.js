@@ -3,89 +3,50 @@ setTimeout(graph, 6500);
 
 function graph(d, data) { 
     console.log("I haz begun");
-    /*
-    var diameter = 400;
-
-    var svg = d3.select('#chart').append('svg')
-        .attr('width', 3*diameter)
-        .attr('height', diameter);
-
-    var bubble = d3.layout.force()
-        .size([diameter, diameter])
-        .value(function(d) {return d.magicNumber;}) // new data is loaded to bubble layout
-        .padding(3)
-
-    // generate data with calculated layout values
-    var nodes = bubble.nodes(friends)
-        .filter(function(d) { return !d.children; }); // filter out the outer bubble
-
-    // assign new data to existing DOM 
-    var vis = svg.selectAll('circle')
-        .data(friends);
-        
-    var elem = svg.selectAll("g bubbleText")
-        .data(nodes, function(d) { return d.name; });
-
-    var elemEnter = vis.enter()
-        .append("g")
-
-    for (var i = 0; i < friends.length; i++) {        
-        var circle = elemEnter.append("circle")
-            .attr('transform', function(d) { return 'translate(' + (i+0.1)*1000/friends.length + ',' + 400/friends.length + ')' })
-            .attr("r", function(d){return 3*friends[i].magicNumber} )
-            .attr("stroke","black")
-            .attr('class', function(d) { return friends[i].name })
-            .attr("fill", function(d){return "url("+friends[i].photo+")"});
-
-
-        elemEnter.append("text")
-            .attr('transform', function(d) { return 'translate(' + i*1000/friends.length + ',' + (-50+(400/friends.length)) + ')' })
-            .attr("dx", function(d){return (-1)*0,1*friends[i].magicNumber})
-            .text(function(d){return friends[i].name});
-
-    }
     
-    console.log("I iz done");
-};
+    var width = 960,
+        height = 500;
 
+    var force = d3.layout.force()
+        .charge(-120)
+        .linkDistance(40)
+        .size([width, height]);
+    
+    
+    var drag = d3.behavior.drag()
+        .origin(function(d) { return d; })
+        .on("dragstart", dragstarted)
+        .on("drag", dragged)
+        .on("dragend", dragended);
 
+     var svg = d3.select("#chart").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + 5 + "," + 5 + ")")
 
-
-
-var margin = {top: -5, right: -5, bottom: -5, left: -5};
-        var width = 1000 - margin.left - margin.right,
-	height = 600- margin.top - margin.bottom;
-	
-	var force = d3.layout.force()
-            .charge(-200)
-            .linkDistance(50)
-            .size([width, height]);
-
-
-        var field = d3.select("#chart").append("svg")
+        var rect = svg.append("rect")
             .attr("width", width)
             .attr("height", height)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.right + ")")
-    
+            .style("fill", "none")
+            .style("pointer-events", "all");
 
-        var container = field.append("g");
-    
-
+        var container = svg.append("g");
                 
                 force
                     .nodes(friends)
                     .links(friendsJSON)
-                    .start();
-                
-for (var i = 0; i < friends.length; i++) {
-		var link = field.append("g")
+                    .start();              
+      
+	    
+		var link = container.append("g")
                         .attr("class", "links")
                         .selectAll(".link")
-			             .data(friendsJSON)
+        
+			.data(friendsJSON)
                         .enter().append("line")
-			             .attr("class", "link")
-			             .style("stroke-width", 3);
+			.attr("class", "link")
+			.style("stroke-width", 3);
  
 		var node = container.append("g")
                         .attr("class", "nodes")
@@ -93,99 +54,111 @@ for (var i = 0; i < friends.length; i++) {
 			.data(friends)
 			.enter().append("g")
 			.attr("class", "node")
-                        .attr("cx", function(d) { return d.x; })
-                        .attr("cy", function(d) { return d.y; })
+                        .attr("cx", function(d) { return 700-d.x; })
+                        .attr("cy", function(d) { return 50+d.y; })
+                        .call(drag);
     
-    console.log("OH CARAGO: "+friends[i].magicNumber);
-
+    		var me = container.append("g")
+                        .attr("class", "nodes")
+                        .selectAll(".node")
+			.data(friends)
+			.enter().append("g")
+			.attr("class", "me")
+                        .attr("cx", function(d) { return 700-d.x; })
+                        .attr("cy", function(d) { return 50+d.y; })
+                        .call(drag);
+		  
 		node.append("circle")
-			.attr("r", function(d) { return 3*friends[i].magicNumber })
-}
+			.attr("r", function(d) { return d.magicNumber * 2; })
+        
+        me.append("circle")
+			.attr("r", 15)
+            .attr("transform", function(d) { return "translate(" + 300 + "," + 0 + ")"; })
+            .style("fill", "Tomato")
+            .style("stroke", "white");
+		 
                 
                 force.on("tick", function() {
-                    link.attr("x1", function(d) { return 3*d.source; })
-                        .attr("y1", function(d) { return 3*d.source; })
-                        .attr("x2", function(d) { return 3*d.target; })
-                        .attr("y2", function(d) { return 3*d.target; });
+                    link.attr("x1", function(d) { return d.source.x; })
+                        .attr("y1", function(d) { return d.source.y; })
+                        .attr("x2", function(d) { return d.target.x; })
+                        .attr("y2", function(d) { return d.target.y; });
 
                     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
                 });
+                    node.append("text")
+                        .text(function(d) { return d.name; });
+    
+                    me.append("text")
+                        .text("YOU")
+                        .attr("transform", function(d) { return "translate(" + 300 + "," + 20 + ")"; })
+                        .style("fill", "white");
                 
                 var linkedByIndex = {};
-                friendsJSON.forEach(function(d) {
-                    linkedByIndex[d.source + "," + d.target] = 1;
+               friendsJSON.forEach(function(d) {
+                    linkedByIndex[d.source.index + "," + d.target.index] = 1;
+                   console.log("HEY HO: " + linkedByIndex);
                 });
 
                 function isConnected(a, b) {
                     return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index];
+                    console.log("ANDA LÁ QUE JÁ TOU FARTA" + linkedByIndex);
                 }
 
-
-}
-
-*/
     
-var width = 960,
-    height = 500;
+    node.on("mouseover", function(d){
+                        
+                        node.classed("node-active", function(o) {
+                            thisOpacity = isConnected(d, o) ? true : false;
+                            this.setAttribute('fill-opacity', thisOpacity);
+                            return thisOpacity;
+                        });
 
-var force = d3.layout.force()
-    .charge(-120)
-    .linkDistance(40)
-    .size([width, height]);
+                        link.classed("link-active", function(o) {
+                            return o.source === d || o.target === d ? true : false;
+                        });
+                        
+                        d3.select(this).classed("node-active", true);
+                        d3.select(this).select("circle").transition()
+                                .duration(750)
+                                .attr("r", (d.magicNumber * 2)*1.5);
+                        d3.select(this).select("text")
+                                .style("fill", "Tomato");
+                        
+                })
+		
+		.on("mouseout", function(d){
+                        
+                        node.classed("node-active", false);
+                        link.classed("link-active", false);
+                    
+                        d3.select(this).select("circle").transition()
+                                .duration(750)
+                                .attr("r", d.magicNumber * 2);
+                });
 
-var svg = d3.select("#chart").append("svg")
-    .attr("width", width)
-    .attr("height", height);
 
-  force
-      .nodes(friends)
-      .links(friendsJSON)
-      .start();
+        function dottype(d) {
+          d.x = +d.x;
+          d.y = +d.y;
+          return d;
+        };
 
-  var link = svg.selectAll(".link")
-      .data(friendsJSON)
-    .enter().append("line")
-      .attr("class", "link")
-      .style("stroke-width", 3);
-  
-  var nodes = force.nodes(friends);  
-    
-    var vis = svg.selectAll('circle')
-        .data(friends);
-        
-    var elem = svg.selectAll("g bubbleText")
-        .data(nodes, function(d) { return d.name; });
+        function dragstarted(d) {
+          d3.event.sourceEvent.stopPropagation();
+          
+          d3.select(this).classed("dragging", true);
+          force.start();
+        }
 
-    var elemEnter = vis.enter()
-        .append("g");
-    
-     var circle = elemEnter.append("circle")
-     .attr("class", "node")
-     .attr("r", function(d){return 2*d.magicNumber})
-     .attr('transform', function(d) { return 'translate(' + 20*d.magicNumber + ',' + 20*d.magicNumber + ')' });
-                 
-    
-    //The code below is draggable but won't show text
-/*  var node = svg.selectAll(".node")
-      .data(friends)
-    .enter().append("circle")
-      .attr("class", "node")
-      .attr("r", function(d){return 2*d.magicNumber})
-    //.append('g')
-      .call(force.drag);*/
+        function dragged(d) {
+          
+          d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+          
+        }
 
-  elemEnter.append("text")
-      .text(function(d) { return d.name; })
-    .attr('transform', function(d) { return 'translate(' + 20*d.magicNumber + ',' + 20*d.magicNumber + ')' });
-    
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return 20+d.source; })
-        .attr("y1", function(d) { return 20+d.source; })
-        .attr("x2", function(d) { return 20+d.target; })
-        .attr("y2", function(d) { return 20+d.target; });
-
-    elemEnter.attr("cx", function(d) { return 10+d.x; })
-        .attr("cy", function(d) { return 10+d.y; });
-  });
+        function dragended(d) {
+          
+          d3.select(this).classed("dragging", false);
+        }
 };
