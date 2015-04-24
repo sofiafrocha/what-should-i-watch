@@ -61,8 +61,8 @@ function resgate() {
         setTimeout(compareLikes, 3000);
         setTimeout(printSuggestions, 3800);
         
-
-        setTimeout(resgate, 5100);
+        //uncomment this para ligar as bolinhas do bolas3
+        //setTimeout(bolinhas, 5500);
 
 
     } else if (response.status === 'not_authorized') {
