@@ -410,17 +410,17 @@ function setCompatibility() {
         
         //se têm a mesma densidade de likes
         if (user.likesName.length >= 0.8*friends[i].commonLikesNames.length && user.likesName.length <= 1.2*friends[i].commonLikesNames.length) {
-            friends[i].magicNumber = friends[i].magicNumber + 5;   
+            friends[i].magicNumber = +friends[i].magicNumber + 5;   
         }
         
         else {
-            friends[i].magicNumber = friends[i].magicNumber + 1;
+            friends[i].magicNumber = +friends[i].magicNumber + 1;
         }
 
         //se têm gostos semelhantes
-        friends[i].magicNumber = friends[i].magicNumber + friends[i].commonLikesNames.length;
+        friends[i].magicNumber = +friends[i].magicNumber + +friends[i].commonLikesNames.length;
         
-        console.log("tu e "+ friends[i].name +" são assim tão compativeis: " + friends[i].magicNumber);
+        console.log("tu e "+ +friends[i].name +" são assim tão compativeis: " + +friends[i].magicNumber);
         
         //proximidade geográfica
         
