@@ -92,7 +92,8 @@ function bolinhas() {
 	  .attr("cx", function(d) { return d.x; })
 	  .attr("cy", function(d) { return d.y; })
 	  .attr("r", function(d) { return d.r; })
-	  .attr("fill", "white");
+	  .attr("fill", "url(profile[0])");
+    
 
 	for (var i = 0; i < labels.length; i++) {
 		vis.append("text")
