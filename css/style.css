@@ -78,3 +78,11 @@ svg {
 .fb_iframe_widget {
     font-size: 40px;
 }
+
+.movie-suggestions {
+    text-decoration: underline;
+}
+
+.movie-suggestions li:hover {
+    cursor: pointer;
+}
