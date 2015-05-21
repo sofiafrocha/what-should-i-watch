@@ -17,6 +17,10 @@ $( ".movie-suggestions" ).click(function(e) {
 
 });
 
+$( "h2" ).click(function(e) {
+    hideMovieInfo();
+});
+
 function getMovieBasicInfo(input){
     console.log("PART II - 1");
 
@@ -58,7 +62,7 @@ function showMovieInfo(){
     $("#dois .columns").append('<div class="row topbar"><div class="large-12 columns"></div></div>');
     $("#dois > .columns").append('<div class="row info"></div>');
 
-    $(".topbar").append('<div class="large-2 columns"><p>Go Back</p></div>');
+    $(".topbar").append('<div class="large-2 columns" id="back"><p>Go Back</p></div>');
     $(".topbar").append('<div class="large-8 columns"><h3>' + clickedMovieBasicInfo.results[0].title + '</h3></div>');
 
     $(".info").append('<div class="large-4 columns" id="synopsis"><p>' + clickedMovieSynopsis + '</p></div>');
@@ -150,4 +154,14 @@ function getMovieTrailer(id) {
             console.log(e.message);
         }
     });
+}
+
+function hideMovieInfo() {
+
+    clickedMovieCast = [];
+
+    $(".info").hide();
+    $(".topbar").hide();
+
+    $(".movie-suggestions").show();
 }
