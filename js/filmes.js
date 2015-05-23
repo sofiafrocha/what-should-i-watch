@@ -21,6 +21,7 @@ $( "h2" ).click(function(e) {
     hideMovieInfo();
 });
 
+
 function getMovieBasicInfo(input){
     console.log("PART II - 1");
 
@@ -164,4 +165,11 @@ function hideMovieInfo() {
     $(".topbar").hide();
 
     $(".movie-suggestions").show();
+}
+
+function clickGraph() {
+    
+    $("#tres").append('<div class="row recs"><div class="large-12 columns"></div></div>');
+    
+    $(".recs").append('<h3> Hey there </h3>');
 }

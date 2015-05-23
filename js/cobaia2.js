@@ -288,6 +288,12 @@ function getFriendsLikes(element, index, array) {
 
                     element.likesNames.push(response.data[j].name);
                     element.likesIDs.push(response.data[j].id);
+                    console.log("COMEÇANDO PASSO INTERMÉDIO");
+                    if (response.paging.next != "undefined"){
+                        console.log("  PASSO INTERMÉDIO - PRINT THIS TO SEE IF IT WORKS " + response.paging.next.data);
+                    } else {
+                        console.log("GOOD OLD 1 PAGE");   
+                    }
 
                 }
 
