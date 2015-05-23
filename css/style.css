@@ -1,8 +1,30 @@
 body {
-    background-color: DarkSlateBlue;
+    background-color: #23384D;
     color: White;
     font-family: "Gentium Basic", serif;
     font-size: 12px;
+    background: linear-gradient(180deg, #23384d, #12ebf2);
+    background-size: 400% 1000%;
+
+    -webkit-animation: EvilSofia 22s ease infinite;
+    -moz-animation: EvilSofia 22s ease infinite;
+    animation: EvilSofia 22s ease infinite;
+
+    @-webkit-keyframes EvilSofia {
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
+    @-moz-keyframes EvilSofia {
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
+    @keyframes EvilSofia { 
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
 }
 
 circle {
@@ -21,13 +43,13 @@ li {
 
 h1, h3, h5 {
     font-family: "PT Mono";
-    color: Tomato; 
+    color: #3C93AF; 
     text-transform: uppercase;
 }
 
 h2, h4, h6 {
     font-family: "PT Mono";
-    color: Cyan; 
+    color: #A5A0B7; 
     text-transform: uppercase;
     text-align: center;
 }
@@ -85,4 +107,18 @@ svg {
 
 .movie-suggestions li:hover {
     cursor: pointer;
+}
+
+.center-btn {
+    text-align: center;
+}
+
+.center-btn {
+    margin-bottom: 60px;
+}
+
+.movie-suggestions {
+    font-size: 20px;
+    text-align: center;
+    list-style-type: none;
 }

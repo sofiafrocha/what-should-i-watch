@@ -4,11 +4,11 @@ function bolinhas() {
 
     var force = d3.layout.force()
         .charge(-120)
-        .linkDistance(40)
-        .size([1000, 600]);
+        .linkDistance(20)
+        .size([600, 600]);
 
 	nodes = [
-		{x: 500, y: 300, r: 14, class : "circ"}
+		{x: 200, y: 100, r: 14, class : "circ"}
 	];
 
 	var tempX;
@@ -18,8 +18,8 @@ function bolinhas() {
 
 	for (var i = 0; i < friendsJSON.length; i++) {
 
-		tempX = 500+300*Math.sin(tempAng * i);
-		tempY = 300+120*Math.cos(tempAng * i);
+		tempX = 200+150*Math.sin(tempAng * i);
+		tempY = 100+100*Math.cos(tempAng * i);
         cirClass = "circ" + i
 
 		nodes.push({x: tempX, y: tempY, r: friendsJSON[i].target, class: cirClass});
@@ -52,7 +52,7 @@ function bolinhas() {
             .attr("y1", function(d) { return d.source.y })
             .attr("x2", function(d) { return d.target.x })
             .attr("y2", function(d) { return d.target.y })
-            .style("stroke", "rgb(6,120,155)");
+            .style("stroke", "rgb(76,80,101)");
     }); 
 
 	vis.selectAll("circle.nodes")

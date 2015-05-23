@@ -17,8 +17,9 @@ $( ".movie-suggestions" ).click(function(e) {
 
 });
 
-$( "h2" ).click(function(e) {
-    hideMovieInfo();
+$('#full-info-btn').click(function() {
+    console.log("clicaste no btn do info!!!!");
+    $('.full-info').toggle();
 });
 
 
@@ -57,25 +58,31 @@ function getMovieBasicInfo(input){
 
 function showMovieInfo(){
     //Hide suggestion list
-    $(".movie-suggestions").hide('slow');
+    $(".movie-suggestions").hide('fast');
 
     //Show Info
-    $("#dois .columns").append('<div class="row topbar"><div class="large-12 columns"></div></div>');
-    $("#dois > .columns").append('<div class="row info"></div>');
+    $(".info-section").append('<div class="row topbar"></div>');
+    $(".info-section").append('<div class="row info"></div>');
 
-    $(".topbar").append('<div class="large-2 columns" id="back"><p>Go Back</p></div>');
+    $(".topbar").append('<div class="large-2 columns"><h6 id="back-button">Back</h6></div>');
     $(".topbar").append('<div class="large-8 columns"><h3>' + clickedMovieBasicInfo.results[0].title + '</h3></div>');
 
-    $(".info").append('<div class="large-4 columns" id="synopsis"><p>' + clickedMovieSynopsis + '</p></div>');
+    $(".info").append('<div class="large-4 columns" id="synopsis"><h5>Synopsis</h5><p>' + clickedMovieSynopsis + '</p></div>');
 
-    var movieTrailerHTML = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + clickedMovieTrailerID + '" frameborder="0" allowfullscreen></iframe>';
+    var movieTrailerHTML = '<iframe width="300" height="190" src="https://www.youtube.com/embed/' + clickedMovieTrailerID + '" frameborder="0" allowfullscreen></iframe>';
 
-    $(".info").append('<div class="large-4 columns" id="trailer">' + movieTrailerHTML + '</div>');
-    $(".info").append('<div class="large-4 columns" id="cast"><ul></ul></div>');
+    $(".info").append('<div class="large-4 columns" id="trailer"><h5>Trailer</h5>' + movieTrailerHTML + '</div>');
+    $(".info").append('<div class="large-4 columns" id="cast"><h5>Cast</h5><ul></ul></div>');
 
     for (var i = 0; i < clickedMovieCast.length; i++) {
         $("#cast ul").append('<li>' + clickedMovieCast[i] + '</li>');
     }
+
+    $( "#back-button" ).click(function(e) {
+        //console.log("clicked the back button");
+        hideMovieInfo();
+    });
+
 }
 
 function getMovieSynopsis(id){
@@ -161,8 +168,8 @@ function hideMovieInfo() {
 
     clickedMovieCast = [];
 
-    $(".info").hide();
-    $(".topbar").hide();
+    $(".info").remove();
+    $(".topbar").remove();
 
     $(".movie-suggestions").show();
 }

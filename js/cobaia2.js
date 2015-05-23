@@ -16,11 +16,7 @@ var mostCompatibleIndex;
 
 var friendsJSON = [];
 
-$('.row').click(function() {
-    console.log("clicaste no btn!!!!");
-    $('.full-info').hide();
-    
-});
+
 
 
 function resgate() {
@@ -67,6 +63,11 @@ function resgate() {
         setTimeout(getAllLikes, 1500);
 
         setTimeout(getAllPhotos, 2000);
+
+        setTimeout( function() {
+            $('.full-info').hide();
+        }, 2000);
+
         setTimeout(compareLikes, 3000);
         setTimeout(printSuggestions, 3800);
         
@@ -290,7 +291,7 @@ function getFriendsLikes(element, index, array) {
                     element.likesIDs.push(response.data[j].id);
                     console.log("COMEÇANDO PASSO INTERMÉDIO");
                     if (response.paging.next != "undefined"){
-                        console.log("  PASSO INTERMÉDIO - PRINT THIS TO SEE IF IT WORKS " + response.paging.next.data);
+                        //console.log("  PASSO INTERMÉDIO - PRINT THIS TO SEE IF IT WORKS " + response.paging.next.data);
                     } else {
                         console.log("GOOD OLD 1 PAGE");   
                     }
@@ -562,4 +563,14 @@ function getUsersPhotos() {
         }
     );
     console.log("5 c) - getUsersPhoto - END");
+}
+
+function showClickedFriendInfo(id) {
+    $("friend-photo").val(friends[id].photo);
+    $("friend-name").val(friends[id].name);
+    $("friend-magic-number").val(friends[id].magicNumber);
+
+    for (var i = 0; i < friends.moviesNames.length; i++) {
+        $("friend-info").append("<li class='friend-movie-name'>" + friends.moviesNames[i] + "</li>");
+    };
 }
