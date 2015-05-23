@@ -176,7 +176,7 @@ function hideMovieInfo() {
 
 function clickGraph() {
     
-    $("#tres").append('<div class="row recs"><div class="large-12 columns"></div></div>');
+    //$("#tres").append('<div class="row recs"><div class="large-12 columns"></div></div>');
     
-    $(".recs").append('<h3> Hey there </h3>');
+    //$(".recs").append('<h3> Hey there </h3>');
 }

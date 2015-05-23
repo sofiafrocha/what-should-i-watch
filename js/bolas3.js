@@ -8,7 +8,7 @@ function bolinhas() {
         .size([600, 600]);
 
 	nodes = [
-		{x: 200, y: 100, r: 14, class : "circ"}
+		{x: 200, y: 200, r: 14, class : "circ", id : 100}
 	];
 
 	var tempX;
@@ -19,10 +19,10 @@ function bolinhas() {
 	for (var i = 0; i < friendsJSON.length; i++) {
 
 		tempX = 200+150*Math.sin(tempAng * i);
-		tempY = 100+100*Math.cos(tempAng * i);
-        cirClass = "circ" + i
+		tempY = 200+100*Math.cos(tempAng * i);
+        cirClass = "circ";
 
-		nodes.push({x: tempX, y: tempY, r: friendsJSON[i].target, class: cirClass});
+		nodes.push({x: tempX, y: tempY, r: friendsJSON[i].target, class: cirClass, id: i});
 	}
 
 	var links = [];
@@ -64,7 +64,11 @@ function bolinhas() {
         .attr("r", function(d) { return d.r; })
         .attr("fill", "#img1")
         .attr("class", function(d) {return d.class; })
-        .on("click", function(d) { clickGraph(); });
+        .attr("id", function(d) {return d.id; })
+        .on("click", function(d) { 
+            console.log("clicaste na bola: " + d.id);
+            showClickedFriendInfo(d.id);
+        });
     
 
 	for (var i = 0; i < labels.length; i++) {

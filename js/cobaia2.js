@@ -523,6 +523,30 @@ function printSuggestions() {
 
     }
 
+    var secondMostCompatible;
+    var temp = -1;
+
+    for (var i = 0; i < friends.length; i++) {
+        console.log("i: " +i);
+        console.log("mostCompatibleIndex: " + mostCompatibleIndex);
+
+        if (i !== mostCompatibleIndex) {
+
+            console.log("temp: " + temp);
+            console.log("friends[i].magicNumber" + friends[i].magicNumber);
+
+            if (friends[i].magicNumber > temp) {
+                secondMostCompatible = i;
+                temp = friends[i].magicNumber;
+            };
+
+        }
+    };
+
+    for (var i = 0; i < friends[secondMostCompatible].moviesNames.length; i++) {
+        $('#dois .columns ul').append('<li>' + friends[secondMostCompatible].moviesNames[i] + '</li>');
+    };
+
     console.log("14 - printSuggestions - END");
 
 }
@@ -566,11 +590,20 @@ function getUsersPhotos() {
 }
 
 function showClickedFriendInfo(id) {
-    $("friend-photo").val(friends[id].photo);
-    $("friend-name").val(friends[id].name);
-    $("friend-magic-number").val(friends[id].magicNumber);
 
-    for (var i = 0; i < friends.moviesNames.length; i++) {
-        $("friend-info").append("<li class='friend-movie-name'>" + friends.moviesNames[i] + "</li>");
+    console.log("id: " + id + "name: " + friends[id].name);
+
+    $("#friend-photo").attr("src", friends[id].photo);
+
+    $("#friend-name").text(friends[id].name);
+    $("#friend-magic-number").text(friends[id].magicNumber);
+
+    console.log("friends[1].moviesNames.length: " + friends[1].moviesNames.length);
+
+    $(".friend-movie-name").remove();
+
+    for (var i = 0; i < friends[id].moviesNames.length; i++) {
+        console.log("eu devia estar a imprimir, já vai no " + i);
+        $("#friend-info").append("<li class='friend-movie-name'>" + friends[id].moviesNames[i] + "</li>");
     };
 }
